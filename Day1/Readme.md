@@ -73,15 +73,15 @@ dis.dis(hello)
 
 
 # Link 
-https://godbolt.org/
-https://markdownlivepreview.com/
-https://en.wikipedia.org/wiki/Guido_van_Rossum
-https://en.wikipedia.org/wiki/ABC_(programming_language)
-https://homepages.cwi.nl/~steven/abc/types.html
-https://www.python.org/downloads/macos/
-https://www.markdownguide.org/cheat-sheet/
-https://github.com/torvalds/linux
-https://github.com/bhavithc/python_batch1
+- https://godbolt.org/
+- https://markdownlivepreview.com/
+- https://en.wikipedia.org/wiki/Guido_van_Rossum
+- https://en.wikipedia.org/wiki/ABC_(programming_language)
+- https://homepages.cwi.nl/~steven/abc/types.html
+- https://www.python.org/downloads/macos/
+- https://www.markdownguide.org/cheat-sheet/
+- https://github.com/torvalds/linux
+- https://github.com/bhavithc/python_batch1
 
 # Git commands 
 
