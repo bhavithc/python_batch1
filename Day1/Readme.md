@@ -91,3 +91,6 @@ dis.dis(hello)
 - `git status` -> You can see the status of the git any time
 - `git log` -> To check the commit messages 
 - `git log -1` -> To check only 1 message, if you give 2 then it shows last two commit messages
+
+
+![alt text](image.png)
