@@ -3,6 +3,7 @@
 
 - [Git commands reference](GitCommands.md)
 - [Day1](Day1/Readme.md)
+- [Day2](Day2/Readme.md)
 
 ## Checklist to be completed 
 
@@ -16,7 +17,7 @@
 **Python basics**
 
 - [ ] Variables and assigments 
-- [ ] Case senestive or case insensitive?
+- [ ] Case sensitive or case insensitive?
 - [ ] Core data types 
 - [ ] Operators 
 - [ ] Input and output
