@@ -1,4 +1,4 @@
-# Day3
+# Day3 & Day4
 
 ### Print on console 
 ```python
@@ -66,7 +66,7 @@ name = "Dilip"
 
 #### Assign multiple values 
 ```python
-a = b = c = 10 # a, b, c are points to integer object 10
+a = b = c = 10, 20, 30 # a, b, c are points to integer object 10
 
 a, b, c = 20 # a, b, c are points to interger object 20
 ``` 
@@ -248,6 +248,30 @@ also I can give brace open (, close ). What ever I am writing here
 
 
 comes as it is. at the end close with three double quotes
+```
+
+### other type of formatting a string in print
+ 
+```python
+name = "Alice"
+age = 30
+pi = 3.14159
+
+# Basic variable insertion
+print(f"Hello, {name}! You are {age} years old.") 
+# Output: Hello, Alice! You are 30 years old.
+
+# Inline math and expressions
+print(f"Next year you will be {age + 1}.") 
+# Output: Next year you will be 31.
+
+# Float precision formatting (2 decimal places)
+print(f"Pi to 2 decimal places: {pi:.2f}") 
+# Output: Pi to 2 decimal places: 3.14
+
+# Self-documenting / Debugging shorthand (Python 3.8+)
+print(f"{name=}, {age=}") 
+# Output: name='Alice', age=30
 ```
 
 

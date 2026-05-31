@@ -4,25 +4,26 @@
 - [Git commands reference](GitCommands.md)
 - [Day1](Day1/Readme.md)
 - [Day2](Day2/Readme.md)
+- [Day3 & Day4](Day3/Readme.md)
 
 ## Checklist to be completed 
 
 ### Python foundation
-- [ ] Undestand how python works behind the scene 
-- [ ] Environment setup
-  - [ ] Python installation 
-  - [ ] Choose an IDE (Editor to write program)
-  - [ ] Setup the virtual environment 
+- [x] Undestand how python works behind the scene 
+- [x] Environment setup
+  - [x] Python installation 
+  - [x] Choose an IDE (Editor to write program)
+  - [ ] Setup the virtual environment
 
 **Python basics**
 
-- [ ] Variables and assigments 
-- [ ] Case sensitive or case insensitive?
-- [ ] Core data types 
+- [x] Variables and assigments 
+- [x] Case sensitive or case insensitive?
+- [x] Core data types, int, float, bool, str
 - [ ] Operators 
-- [ ] Input and output
-- [ ] Type casting 
-- [ ] Assignments
+- [x] Input and output (print, input)
+- [ ] Type casting (`int()`)
+- [x] Assignments
   - [ ] Ask for the user's name and print a personalised greeting.
   - [ ] Km to miles converter: read km, print miles (×0.621371).
   - [ ] Area and perimeter of a rectangle from user input.
