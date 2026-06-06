@@ -16,8 +16,13 @@
 # print("sum of {} and {} is {}".format(a, b, a+b)) # This output will give merging of two numbers
 
 
-a = int(input("please enter the first number: \n"))  #25
-b = int(input("please enter the second number: \n")) #20
+# a = int(input("please enter the first number: \n"))  #25
+# b = int(input("please enter the second number: \n")) #20
 
-print("sum of {} and {} is {}".format(a, b, a+b))
+# print("sum of {} and {} is {}".format(a, b, a+b))
+
+
+name = input("what is your name?")
+
+name = input("what is your name?\n")
 
