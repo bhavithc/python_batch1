@@ -13,7 +13,7 @@
 - [x] Environment setup
   - [x] Python installation 
   - [x] Choose an IDE (Editor to write program)
-  - [ ] Setup the virtual environment
+  - [x] Setup the virtual environment
 
 **Python basics**
 
@@ -43,7 +43,12 @@
 - [ ] Functions
   - [ ] Defining and Calling
   - [ ] *args and **kwargs
-  - [ ] Scope and Lambda
+  - [ ] Global and local scope
+  - [ ] Pass function as parameter
+  - [ ] callable
+  - [ ] Decorators
+  - [ ] Function inside function
+  - [ ] Lambda  -> lambda
   - [ ] Assignments
     - [ ] Write is_prime(n) returning True if n is prime.
     - [ ] Write factorial(n) using recursion.
