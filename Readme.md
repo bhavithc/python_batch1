@@ -20,19 +20,19 @@
 - [x] Variables and assigments 
 - [x] Case sensitive or case insensitive?
 - [x] Core data types, int, float, bool, str
-- [ ] Operators 
+- [x] Operators 
 - [x] Input and output (print, input)
-- [ ] Type casting (`int()`)
+- [x] Type casting (`int()`)
 - [x] Assignments
   - [ ] Ask for the user's name and print a personalised greeting.
   - [ ] Km to miles converter: read km, print miles (×0.621371).
   - [ ] Area and perimeter of a rectangle from user input.
   - [ ] Two numbers: print sum, difference, product, quotient.
   - [ ] Tip calculator: bill + tip % → total to pay.
-- [ ] Control flow 
-  - [ ] if / elif / else
-  - [ ] for Loops
-  - [ ] while, break, continue
+- [x] Control flow 
+  - [x] if / elif / else
+  - [x] for Loops
+  - [x] while, break, continue
   - [ ] List Comprehensions (preview)
   - [ ] Assignments
     - [ ] FizzBuzz: 1-100, multiples of 3→Fizz, 5→Buzz, 15→FizzBuzz.
@@ -41,13 +41,13 @@
     - [ ] Reverse a number without string conversion.
     - [ ] Largest of three numbers without max().
 - [ ] Functions
-  - [ ] Defining and Calling
+  - [x] Defining and Calling
   - [ ] *args and **kwargs
-  - [ ] Global and local scope
-  - [ ] Pass function as parameter
-  - [ ] callable
-  - [ ] Decorators
-  - [ ] Function inside function
+  - [x] Global,local and non local scope
+  - [x] Pass function as parameter
+  - [x] callable
+  - [x] Decorators
+  - [x] Function inside function
   - [ ] Lambda  -> lambda
   - [ ] Assignments
     - [ ] Write is_prime(n) returning True if n is prime.
