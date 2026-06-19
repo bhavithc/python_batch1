@@ -8,7 +8,7 @@ print(id(b))
 def add(a,b):
     return a+b
     
-print(sys.refcount(a))
+print(sys.getrefcount(a))
 
 a=10
 a='name'
