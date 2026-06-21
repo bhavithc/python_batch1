@@ -32,3 +32,5 @@ print('This is int: {num}, This is bool: {flag}, This is float: {value}'.format(
 print("Helloworld")
 a= "dilipkumar "
 print(a)
+Normalstory = " A young boy named Arjun found a tiny seed on his way home from school Curious he planted it in a small pot and watered it every day "
+print("Normalstory")
