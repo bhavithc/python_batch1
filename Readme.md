@@ -33,7 +33,8 @@
   - [x] if / elif / else
   - [x] for Loops
   - [x] while, break, continue
-  - [ ] List Comprehensions (preview)
+  - [x] List Comprehensions (preview)
+  - [ ] About .pyi -> For removing the source code
   - [ ] Assignments
     - [ ] FizzBuzz: 1-100, multiples of 3→Fizz, 5→Buzz, 15→FizzBuzz.
     - [ ] Number guessing game: random 1-100, hot/cold hints.
@@ -42,12 +43,13 @@
     - [ ] Largest of three numbers without max().
 - [ ] Functions
   - [x] Defining and Calling
-  - [ ] *args and **kwargs
+  - [ ] *args and **kwargs (*args -> Tuple -> postional arg and **kwargs -> Dictionary -> keword argument)
   - [x] Global,local and non local scope
   - [x] Pass function as parameter
   - [x] callable
   - [x] Decorators
   - [x] Function inside function
+  - [x] Define default paramters for the function
   - [ ] Lambda  -> lambda
   - [ ] Assignments
     - [ ] Write is_prime(n) returning True if n is prime.
@@ -56,7 +58,7 @@
     - [ ] Write celsius_to_fahrenheit(c) and fahrenheit_to_celsius(f).
     - [ ] Build calc(a, b, op) where op is '+' '-' '*' '/'.
 - [ ] Data Structures
-    - [ ] Lists
+    - [x] Lists
     - [ ] Tuples and Dicts
     - [ ] Sets and Comprehensions
     - [ ] Assignments
@@ -65,4 +67,3 @@
       - [ ] Find duplicates in a list using a set.
       - [ ] Two name lists: find common, only-in-A, only-in-B.
       - [ ] Return the second largest unique number in a list.
-
