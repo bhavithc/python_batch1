@@ -1,0 +1,30 @@
+INFO:root:sum entered
+INFO:root:sum exit
+INFO:root:foo entered
+INFO:root:foo exit
+INFO:root:bar entered
+INFO:root:bar exit
+2026-07-05 07:57:50,704 INFO:root:sum entered
+2026-07-05 07:57:50,704 INFO:root:sum exit
+2026-07-05 07:57:50,704 INFO:root:foo entered
+2026-07-05 07:57:50,704 INFO:root:foo exit
+2026-07-05 07:57:50,704 INFO:root:bar entered
+2026-07-05 07:57:50,704 INFO:root:bar exit
+2026-07-05 07:58:28,747 WARNING:root:sum entered
+2026-07-05 07:58:28,747 ERROR:root:sum exit
+2026-07-05 07:58:28,747 WARNING:root:foo entered
+2026-07-05 07:58:28,747 ERROR:root:foo exit
+2026-07-05 07:58:28,747 WARNING:root:bar entered
+2026-07-05 07:58:28,747 ERROR:root:bar exit
+2026-07-05 07:59:29,084 DEBUG:root:sum entered
+2026-07-05 07:59:29,084 DEBUG:root:sum exit
+2026-07-05 07:59:29,084 DEBUG:root:foo entered
+2026-07-05 07:59:29,084 DEBUG:root:foo exit
+2026-07-05 07:59:29,084 DEBUG:root:bar entered
+2026-07-05 07:59:29,084 DEBUG:root:bar exit
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:sum entered
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:sum exit
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:foo entered
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:foo exit
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:bar entered
+2026-07-05 08:02:25,347 DEBUG MainThread None :root:bar exit
