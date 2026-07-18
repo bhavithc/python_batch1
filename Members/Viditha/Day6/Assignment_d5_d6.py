@@ -37,10 +37,17 @@ while num > 0:
 print("Reversed number:", reverse)
 
 #5
-num=[]
-for i in range(0,3):
-    num=int(input("enter the 3 numbers"))
-    print(num)
+a=int(input("enter the number 1st"))
+b=int(input("enter the number 2nd"))
+c=int(input("enter the number 3rd"))
+largest=0
+if a>=b and a>=c:
+    largest=a
+elif  b>=a and b>=c:
+    largest=b
+else :
+    largest=c
+print("largest number:{largest}")    
 
 
 
