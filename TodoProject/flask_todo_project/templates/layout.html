@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Flask ToDo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-light">
+    <div class="container py-4">
+        <h2 class="text-center mb-4">✅ Flask ToDo Manager</h2>
+        {% block body %}{% endblock %}
+    </div>
+</body>
+
+</html>

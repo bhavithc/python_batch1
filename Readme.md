@@ -41,9 +41,9 @@
     - [ ] Print all primes up to 100.
     - [ ] Reverse a number without string conversion.
     - [ ] Largest of three numbers without max().
-- [ ] Functions
+- [x] Functions
   - [x] Defining and Calling
-  - [ ] *args and **kwargs (*args -> Tuple -> postional arg and **kwargs -> Dictionary -> keword argument)
+  - [x] *args and **kwargs (*args -> Tuple -> postional arg and **kwargs -> Dictionary -> keword argument)
   - [x] Global,local and non local scope
   - [x] Pass function as parameter
   - [x] callable
@@ -57,10 +57,10 @@
     - [ ] Write word_count(text) returning number of words.
     - [ ] Write celsius_to_fahrenheit(c) and fahrenheit_to_celsius(f).
     - [ ] Build calc(a, b, op) where op is '+' '-' '*' '/'.
-- [ ] Data Structures
+- [x] Data Structures
     - [x] Lists
-    - [ ] Tuples and Dicts
-    - [ ] Sets and Comprehensions
+    - [x] Tuples and Dicts
+    - [x] Sets and Comprehensions
     - [ ] Assignments
       - [ ] Contact book: dict of name→phone with add/remove/search.
       - [ ] Word frequency counter using a dict.
