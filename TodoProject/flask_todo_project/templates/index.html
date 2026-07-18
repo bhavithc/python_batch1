@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="card p-3 mb-4">
+    <form action="/add" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" name="title" placeholder="Enter task">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="priority">
+                    <option>High</option>
+                    <option selected>Medium</option>
+                    <option>Low</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-warning w-50">Add Task</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row text-center mb-4">
+    <div class="col">
+        <div class="card p-3">Total<br><b>{{total}}</b></div>
+    </div>
+    <div class="col">
+        <div class="card p-3">Open<br><b>{{open_tasks}}</b></div>
+    </div>
+    <div class="col">
+        <div class="card p-3">Completed<br><b>{{completed}}</b></div>
+    </div>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{task.id}}</td>
+            <td {% if task.completed %}class="text-decoration-line-through" {% endif %}>{{task.title}}</td>
+            <td>{{task.priority}}</td>
+            <td>{{"Done" if task.completed else "Open"}}</td>
+            <td>
+                <a class="btn btn-success btn-sm" href="/toggle/{{task.id}}">
+                    {{"Undo" if task.completed else "Done"}}
+                </a>
+                <a class="btn btn-danger btn-sm" href="/delete/{{task.id}}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<div class="btn-group">
+  <a href="#" class="btn btn-primary active" aria-current="page">Active link</a>
+  <a href="#" class="btn btn-primary">Link</a>
+  <a href="#" class="btn btn-primary">Link</a>
+</div>
+
+
+
+<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+  <button type="button" class="btn btn-primary">1</button>
+  <button type="button" class="btn btn-primary">2</button>
+
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Dropdown
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+      <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+    </ul>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary position-relative">
+  Inbox
+  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    99+
+    <span class="visually-hidden">unread messages</span>
+  </span>
+</button>
+
+{% endblock %}
