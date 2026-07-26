@@ -67,3 +67,13 @@
       - [ ] Find duplicates in a list using a set.
       - [ ] Two name lists: find common, only-in-A, only-in-B.
       - [ ] Return the second largest unique number in a list.
+
+### Advance topics 
+- [ ] OOPS
+  - [ ] Classes and Objects 
+  - [ ] Inheritance and super
+  - [ ] Dunder (Double UNDERscore) methods and data classes 
+
+### AI Topics 
+- [ ] What is AI 
+- [ ] 

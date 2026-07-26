@@ -1,0 +1,1331 @@
+2026-07-26 07:55:13 [DEBUG]
+ Received request: POST to /v1/messages with body  {
+  "model": "llama-3.2-1b-instruct",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "<system-reminder>\nAs you answer the user's questio... <Truncated in logs> ...highly relevant to your task.\n</system-reminder>\n\n"
+        },
+        {
+          "type": "text",
+          "text": "<local-command-caveat>Caveat: The messages below w... <Truncated in logs> ...er explicitly asks you to.</local-command-caveat>\n"
+        },
+        {
+          "type": "text",
+          "text": "<command-name>/model</command-name>\n            <c... <Truncated in logs> ...essage>\n            <command-args></command-args>\n"
+        },
+        {
+          "type": "text",
+          "text": "<local-command-stdout>Set model to \u001b[1mllama-3.2-1... <Truncated in logs> ...r default for new sessions</local-command-stdout>\n"
+        },
+        {
+          "type": "text",
+          "text": "hi"
+        }
+      ]
+    },
+    {
+      "role": "system",
+      "content": [
+        {
+          "type": "text",
+          "text": "Available agent types for the Agent tool:\n- claude... <Truncated in logs> ...eview of the pending changes on the current branch",
+          "cache_control": {
+            "type": "ephemeral"
+          }
+        }
+      ]
+    }
+  ],
+  "system": [
+    {
+      "type": "text",
+      "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+      "cache_control": {
+        "type": "ephemeral"
+      }
+    },
+    {
+      "type": "text",
+      "text": "\nYou are an interactive agent that helps users wit... <Truncated in logs> ...\n71cb754 basic of python\n19938a9 dilip assignments",
+      "cache_control": {
+        "type": "ephemeral"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "name": "Agent",
+      "description": "Launch a new agent to handle complex, multi-step t... <Truncated in logs> ...er asks before it arrives, say it's still running.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "A short (3-5 word) description of the task",
+            "type": "string"
+          },
+          "prompt": {
+            "description": "The task for the agent to perform",
+            "type": "string"
+          },
+          "subagent_type": {
+            "description": "The type of specialized agent to use for this task",
+            "type": "string"
+          },
+          "model": {
+            "description": "Optional model override for this agent. Takes prec... <Truncated in logs> ...e: \"fork\" — forks always inherit the parent model.",
+            "type": "string",
+            "enum": [
+              "sonnet",
+              "opus",
+              "haiku",
+              "fable"
+            ]
+          },
+          "run_in_background": {
+            "description": "Agents run in the background by default; you will ... <Truncated in logs> ...nously when you need its result before continuing.",
+            "type": "boolean"
+          },
+          "isolation": {
+            "description": "Isolation mode. \"worktree\" creates a temporary git... <Truncated in logs> ...always runs in background; availability is gated).",
+            "type": "string",
+            "enum": [
+              "worktree",
+              "remote"
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "prompt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "AskUserQuestion",
+      "description": "Use this tool only when you are blocked on a decis... <Truncated in logs> ...ed for single-select questions (not multiSelect).\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "questions": {
+            "description": "Questions to ask the user (1-4 questions)",
+            "minItems": 1,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "description": "The complete question to ask the user. Should be c... <Truncated in logs> ...ngly, e.g. \"Which features do you want to enable?\"",
+                  "type": "string"
+                },
+                "header": {
+                  "description": "Very short label displayed as a chip/tag (max 12 chars). Examples: \"Auth method\", \"Library\", \"Approach\".",
+                  "type": "string"
+                },
+                "options": {
+                  "description": "The available choices for this question. Must have... <Truncated in logs> ...ther' option, that will be provided automatically.",
+                  "minItems": 2,
+                  "maxItems": 4,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "description": "The display text for this option that the user wil... <Truncated in logs> ...ncise (1-5 words) and clearly describe the choice.",
+                        "type": "string"
+                      },
+                      "description": {
+                        "description": "Explanation of what this option means or what will... <Truncated in logs> ...roviding context about trade-offs or implications.",
+                        "type": "string"
+                      },
+                      "preview": {
+                        "description": "Optional preview content rendered when this option... <Truncated in logs> ... tool description for the expected content format.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "label",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "multiSelect": {
+                  "description": "Set to true to allow the user to select multiple o... <Truncated in logs> ... one. Use when choices are not mutually exclusive.",
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "question",
+                "header",
+                "options",
+                "multiSelect"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "answers": {
+            "description": "User answers collected by the permission component",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "annotations": {
+            "description": "Optional per-question annotations from the user (e.g., notes on preview selections). Keyed by question text.",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "preview": {
+                  "description": "The preview content of the selected option, if the question used previews.",
+                  "type": "string"
+                },
+                "notes": {
+                  "description": "Free-text notes the user added to their selection.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "metadata": {
+            "description": "Optional metadata for tracking and analytics purposes. Not displayed to user.",
+            "type": "object",
+            "properties": {
+              "source": {
+                "description": "Optional identifier for the source of this questio... <Truncated in logs> ...r /remember command). Used for analytics tracking.",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "questions"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Bash",
+      "description": "Executes a bash command and returns its output.\n\n-... <Truncated in logs> ...with [Claude Code](https://claude.com/claude-code)",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "command": {
+            "description": "The command to execute",
+            "type": "string"
+          },
+          "timeout": {
+            "description": "Optional timeout in milliseconds (max 600000)",
+            "type": "number"
+          },
+          "description": {
+            "description": "Clear, concise description of what this command do... <Truncated in logs> ...tch JSON from URL and extract data array elements\"",
+            "type": "string"
+          },
+          "run_in_background": {
+            "description": "Set to true to run this command in the background.",
+            "type": "boolean"
+          },
+          "dangerouslyDisableSandbox": {
+            "description": "Set this to true to dangerously override sandbox mode and run commands without sandboxing.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "CronCreate",
+      "description": "Schedule a prompt to be enqueued at a future time.... <Truncated in logs> ...obs.\n\nReturns a job ID you can pass to CronDelete.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "cron": {
+            "description": "Standard 5-field cron expression in local time: \"M... <Truncated in logs> ...es, \"30 14 28 2 *\" = Feb 28 at 2:30pm local once).",
+            "type": "string"
+          },
+          "prompt": {
+            "description": "The prompt to enqueue at each fire time.",
+            "type": "string"
+          },
+          "recurring": {
+            "description": "true (default) = fire on every cron match until de... <Truncated in logs> ...e-shot requests with pinned minute/hour/dom/month.",
+            "type": "boolean"
+          },
+          "durable": {
+            "description": "Has no effect — durable persistence is not availab... <Truncated in logs> ...y (in-memory, gone when this Claude session ends).",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cron",
+          "prompt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "CronDelete",
+      "description": "Cancel a cron job previously scheduled with CronCreate. Removes it from the in-memory session store.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Job ID returned by CronCreate.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "CronList",
+      "description": "List all cron jobs scheduled via CronCreate in this session.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "DesignSync",
+      "description": "Read and update the user's claude.ai/design design... <Truncated in logs> ...nd tell the user something looks odd in that path.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "list_projects",
+              "get_project",
+              "list_files",
+              "get_file",
+              "finalize_plan",
+              "write_files",
+              "delete_files",
+              "register_assets",
+              "unregister_assets",
+              "create_project",
+              "report_validate"
+            ]
+          },
+          "projectId": {
+            "description": "Required for all methods except list_projects and create_project",
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "description": "get_file: file path to read",
+            "type": "string",
+            "minLength": 1
+          },
+          "writes": {
+            "description": "finalize_plan: exact paths or glob patterns that w... <Truncated in logs> ...to cover more files rather than enumerating paths.",
+            "maxItems": 256,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "deletes": {
+            "description": "finalize_plan: exact paths or glob patterns that will be deleted (same syntax and limits as writes).",
+            "maxItems": 256,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "planId": {
+            "description": "write_files/delete_files/register_assets/unregister_assets: token from a prior finalize_plan call",
+            "type": "string",
+            "minLength": 1
+          },
+          "files": {
+            "description": "write_files: file contents to write (max 256 per c... <Truncated in logs> ...multiple write_files calls under the same planId).",
+            "maxItems": 256,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "description": "Path within the project, e.g. components/button/index.html",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "localPath": {
+                  "description": "Path on disk to read file contents from, relative ... <Truncated in logs> ...r the model context. Mutually exclusive with data.",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "data": {
+                  "description": "Inline file contents (UTF-8 text, or base64 when e... <Truncated in logs> ...ing you have on disk should use localPath instead.",
+                  "type": "string"
+                },
+                "encoding": {
+                  "description": "Set to \"base64\" for binary inline data",
+                  "type": "string",
+                  "enum": [
+                    "base64"
+                  ]
+                },
+                "mimeType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "paths": {
+            "description": "delete_files: paths to delete. unregister_assets: ... <Truncated in logs> ...tches across multiple calls under the same planId.",
+            "maxItems": 256,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "name": {
+            "description": "create_project: name for the new design-system project",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "assets": {
+            "description": "register_assets: cards to register in the Design S... <Truncated in logs> ... Run after write_files succeeds. Max 256 per call.",
+            "maxItems": 256,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "Short human-readable label (\"Primary buttons\"), not a path",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                "path": {
+                  "description": "Project-relative path to the preview/spec file this card renders",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "subtitle": {
+                  "description": "Variants shown (\"Primary / secondary / ghost, 3 sizes\")",
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "viewport": {
+                  "description": "Card dimensions in the Design System pane",
+                  "type": "object",
+                  "properties": {
+                    "width": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "height": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "width"
+                  ],
+                  "additionalProperties": false
+                },
+                "group": {
+                  "description": "Free-form section label for the Design System pane... <Truncated in logs> ...\", \"Brand\". The pane groups by the value you send.",
+                  "type": "string",
+                  "maxLength": 64
+                }
+              },
+              "required": [
+                "name",
+                "path"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "localDir": {
+            "description": "finalize_plan: directory the bundle was built into... <Truncated in logs> ... absolute path and shown in the permission prompt.",
+            "type": "string",
+            "minLength": 1
+          },
+          "counts": {
+            "description": "report_validate: aggregate from the final .render-check.json — counts only, no component names or paths.",
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "bad": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "thin": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "variantsIdentical": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "iterations": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "total",
+              "bad",
+              "thin",
+              "variantsIdentical",
+              "iterations"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "method"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Edit",
+      "description": "Performs exact string replacement in a file.\n\n- Yo... <Truncated in logs> ...lace_all: true` replaces every occurrence instead.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "description": "The absolute path to the file to modify",
+            "type": "string"
+          },
+          "old_string": {
+            "description": "The text to replace",
+            "type": "string"
+          },
+          "new_string": {
+            "description": "The text to replace it with (must be different from old_string)",
+            "type": "string"
+          },
+          "replace_all": {
+            "description": "Replace all occurrences of old_string (default false)",
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "file_path",
+          "old_string",
+          "new_string"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "EnterPlanMode",
+      "description": "Use this tool proactively when you're about to sta... <Truncated in logs> ...re significant changes are made to their codebase\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "EnterWorktree",
+      "description": "Use this tool ONLY when explicitly instructed to w... <Truncated in logs> ...nested inside it. Mutually exclusive with `name`.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Optional name for a new worktree. Each \"/\"-separat... <Truncated in logs> ...d if not provided. Mutually exclusive with `path`.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Path to an existing worktree to switch into instea... <Truncated in logs> ...i-repo workspace). Mutually exclusive with `name`.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "ExitPlanMode",
+      "description": "Use this tool when you are in plan mode and have f... <Truncated in logs> ...xit plan mode tool after clarifying the approach.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "allowedPrompts": {
+            "description": "Deprecated: no longer used.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "description": "The tool this prompt applies to",
+                  "type": "string",
+                  "enum": [
+                    "Bash"
+                  ]
+                },
+                "prompt": {
+                  "description": "Semantic description of the action, e.g. \"run tests\", \"install dependencies\"",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool",
+                "prompt"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": {}
+      }
+    },
+    {
+      "name": "ExitWorktree",
+      "description": "Exit a worktree session created by EnterWorktree a... <Truncated in logs> ...ee can be called again to create a fresh worktree\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "action": {
+            "description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes both.",
+            "type": "string",
+            "enum": [
+              "keep",
+              "remove"
+            ]
+          },
+          "discard_changes": {
+            "description": "Required true when action is \"remove\" and the work... <Truncated in logs> ...its. The tool will refuse and list them otherwise.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Monitor",
+      "description": "Start a background monitor that streams events fro... <Truncated in logs> ...frames with shell tools before they become events.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "Short human-readable description of what you are monitoring (shown in notifications).",
+            "type": "string"
+          },
+          "timeout_ms": {
+            "description": "Kill the monitor after this deadline. Default 300000ms, max 3600000ms. Ignored when persistent is true.",
+            "default": 300000,
+            "type": "number",
+            "minimum": 1000
+          },
+          "persistent": {
+            "description": "Run for the lifetime of the session (no timeout). ... <Truncated in logs> ...ke PR monitoring or log tails. Stop with TaskStop.",
+            "default": false,
+            "type": "boolean"
+          },
+          "command": {
+            "description": "Shell command or script. Each stdout line is an event; exit ends the watch.",
+            "type": "string"
+          },
+          "ws": {
+            "description": "WebSocket to open. Each text frame is an event; bi... <Truncated in logs> ...e ends the watch. Cannot be combined with command.",
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "protocols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$"
+                }
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "description",
+          "timeout_ms",
+          "persistent"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "NotebookEdit",
+      "description": "Replaces, inserts, or deletes a single cell in a J... <Truncated in logs> ...d when inserting. Use `delete` to remove the cell.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "notebook_path": {
+            "description": "The absolute path to the Jupyter notebook file to edit (must be absolute, not relative)",
+            "type": "string"
+          },
+          "cell_id": {
+            "description": "The ID of the cell to edit. When inserting a new c... <Truncated in logs> ...ith this ID, or at the beginning if not specified.",
+            "type": "string"
+          },
+          "new_source": {
+            "description": "The new source for the cell",
+            "type": "string"
+          },
+          "cell_type": {
+            "description": "The type of the cell (code or markdown). If not sp... <Truncated in logs> ...type. If using edit_mode=insert, this is required.",
+            "type": "string",
+            "enum": [
+              "code",
+              "markdown"
+            ]
+          },
+          "edit_mode": {
+            "description": "The type of edit to make (replace, insert, delete). Defaults to replace.",
+            "type": "string",
+            "enum": [
+              "replace",
+              "insert",
+              "delete"
+            ]
+          }
+        },
+        "required": [
+          "notebook_path",
+          "new_source"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "PushNotification",
+      "description": "This tool sends a desktop notification in the user... <Truncated in logs> ...t was redundant, turned off, or had nowhere to go.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "The notification body. Keep it under 200 characters; mobile OSes truncate.",
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "const": "proactive"
+          }
+        },
+        "required": [
+          "message",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Read",
+      "description": "Reads a file from the local filesystem.\n\n- `file_p... <Truncated in logs> ...failed, and the harness tracks file state for you.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "description": "The absolute path to the file to read",
+            "type": "string"
+          },
+          "offset": {
+            "description": "The line number to start reading from. Only provide if the file is too large to read at once",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "limit": {
+            "description": "The number of lines to read. Only provide if the file is too large to read at once.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "pages": {
+            "description": "Page range for PDF files (e.g., \"1-5\", \"3\", \"10-20\"). Only applicable to PDF files. Maximum 20 pages per request.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_path"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "ReportFindings",
+      "description": "Report code-review findings as a typed list so the... <Truncated in logs> ...utcome` on each finding to what actually happened.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "level": {
+            "description": "Effort level the review ran at",
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ]
+          },
+          "findings": {
+            "description": "Verified findings, most-severe first; empty if none survived",
+            "maxItems": 32,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "description": "Repo-relative path of the file the finding is in",
+                  "type": "string"
+                },
+                "line": {
+                  "description": "1-indexed line the finding anchors to",
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "summary": {
+                  "description": "One-sentence statement of the defect",
+                  "type": "string"
+                },
+                "short_summary": {
+                  "description": "Compressed label for compact UI (≤60 chars): the claim alone, no rationale or consequence clause",
+                  "type": "string",
+                  "maxLength": 60
+                },
+                "failure_scenario": {
+                  "description": "Concrete inputs/state → wrong output/crash",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "Short kebab-case slug of the finding type, e.g. \"correctness\", \"simplification\", \"efficiency\", \"test-coverage\"",
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "verdict": {
+                  "description": "Set when a verify pass ran; absent on inline-only reviews",
+                  "type": "string",
+                  "enum": [
+                    "CONFIRMED",
+                    "PLAUSIBLE"
+                  ]
+                },
+                "outcome": {
+                  "description": "Set ONLY when re-reporting after applying fixes: what happened to this finding",
+                  "type": "string",
+                  "enum": [
+                    "fixed",
+                    "skipped",
+                    "no_change_needed"
+                  ]
+                }
+              },
+              "required": [
+                "file",
+                "summary",
+                "failure_scenario"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "findings"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "ScheduleWakeup",
+      "description": "Schedule when to resume work in /loop dynamic mode... <Truncated in logs> ...edict your cadence in advance — make it specific.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "delaySeconds": {
+            "description": "Seconds from now to wake up. Clamped to [60, 3600] by the runtime. Required unless `stop` is true.",
+            "type": "number"
+          },
+          "reason": {
+            "description": "One short sentence explaining the chosen delay. Go... <Truncated in logs> ...user. Be specific. Required unless `stop` is true.",
+            "type": "string"
+          },
+          "prompt": {
+            "description": "The /loop input to fire on wake-up. Pass the same ... <Truncated in logs> ...tonomous-loop>>`). Required unless `stop` is true.",
+            "type": "string"
+          },
+          "stop": {
+            "description": "Set to true to end the dynamic loop immediately in... <Truncated in logs> ...er fields are ignored and no further wakeups fire.",
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "SendMessage",
+      "description": "# SendMessage\n\nSend a message to another agent.\n\n`... <Truncated in logs> ... the original — it's already rendered to the user.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "to": {
+            "description": "Recipient: teammate name",
+            "type": "string"
+          },
+          "summary": {
+            "description": "A 5-10 word summary shown as a preview in the UI (required when message is a string)",
+            "type": "string",
+            "maxLength": 200
+          },
+          "message": {
+            "description": "Plain text message content",
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Skill",
+      "description": "Invoke a skill.\n\nA skill is a packaged set of inst... <Truncated in logs> ...d — follow it directly rather than calling again.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "skill": {
+            "description": "The name of a skill from the available-skills list. Do not guess names.",
+            "type": "string"
+          },
+          "args": {
+            "description": "Optional arguments for the skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskCreate",
+      "description": "Use this tool to create a structured task list for... <Truncated in logs> ... TaskList first to avoid creating duplicate tasks\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "subject": {
+            "description": "A brief title for the task",
+            "type": "string"
+          },
+          "description": {
+            "description": "What needs to be done",
+            "type": "string"
+          },
+          "activeForm": {
+            "description": "Present continuous form shown in spinner when in_progress (e.g., \"Running tests\")",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Arbitrary metadata to attach to the task",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "subject",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskGet",
+      "description": "Use this tool to retrieve a task by its ID from th... <Truncated in logs> ...\n- Use TaskList to see all tasks in summary form.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "description": "The ID of the task to retrieve",
+            "type": "string"
+          }
+        },
+        "required": [
+          "taskId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskList",
+      "description": "Use this tool to list all tasks in the task list.\n... <Truncated in logs> ... full details including description and comments.\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskOutput",
+      "description": "DEPRECATED: Background tasks return their output f... <Truncated in logs> ...ckground shells, async agents, and remote sessions",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "description": "The task ID to get output from",
+            "type": "string"
+          },
+          "block": {
+            "description": "Whether to wait for completion",
+            "default": true,
+            "type": "boolean"
+          },
+          "timeout": {
+            "description": "Max wait time in ms",
+            "default": 30000,
+            "type": "number",
+            "minimum": 0,
+            "maximum": 600000
+          }
+        },
+        "required": [
+          "task_id",
+          "block",
+          "timeout"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskStop",
+      "description": "\n- Stops a running background task by its ID\n- Tak... <Truncated in logs> ...ol when you need to terminate a long-running task\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "description": "The ID of the background task to stop. Agent-team ... <Truncated in logs> ...ound agents are also accepted by agent ID or name.",
+            "type": "string"
+          },
+          "shell_id": {
+            "description": "Deprecated: use task_id instead",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "TaskUpdate",
+      "description": "Use this tool to update a task in the task list.\n\n... <Truncated in logs> ...``json\n{\"taskId\": \"2\", \"addBlockedBy\": [\"1\"]}\n```\n",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "description": "The ID of the task to update",
+            "type": "string"
+          },
+          "subject": {
+            "description": "New subject for the task",
+            "type": "string"
+          },
+          "description": {
+            "description": "New description for the task",
+            "type": "string"
+          },
+          "activeForm": {
+            "description": "Present continuous form shown in spinner when in_progress (e.g., \"Running tests\")",
+            "type": "string"
+          },
+          "status": {
+            "description": "New status for the task",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "in_progress",
+                  "completed"
+                ]
+              },
+              {
+                "type": "string",
+                "const": "deleted"
+              }
+            ]
+          },
+          "addBlocks": {
+            "description": "Task IDs that this task blocks",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "addBlockedBy": {
+            "description": "Task IDs that block this task",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "owner": {
+            "description": "New owner for the task",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Metadata keys to merge into the task. Set a key to null to delete it.",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "taskId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "WebFetch",
+      "description": "Fetches a URL, converts the page to markdown, and ... <Truncated in logs> ...RL.\n- Responses are cached for 15 minutes per URL.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "url": {
+            "description": "The URL to fetch content from",
+            "type": "string",
+            "format": "uri"
+          },
+          "prompt": {
+            "description": "The prompt to run on the fetched content",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "prompt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "WebSearch",
+      "description": "Search the web. Returns result blocks with titles ... <Truncated in logs> ...ces:\" list of the URLs you used as markdown links.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "query": {
+            "description": "The search query to use",
+            "type": "string",
+            "minLength": 2
+          },
+          "allowed_domains": {
+            "description": "Only include search results from these domains",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocked_domains": {
+            "description": "Never include search results from these domains",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Workflow",
+      "description": "Execute a workflow script that orchestrates multip... <Truncated in logs> ...remove it with \"Dynamic workflow size\" in /config.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "script": {
+            "description": "Self-contained workflow script. Must begin with `e... <Truncated in logs> ... body using agent()/parallel()/pipeline()/phase().",
+            "type": "string",
+            "maxLength": 524288
+          },
+          "name": {
+            "description": "Name of a predefined workflow (built-in or from .claude/workflows/). Resolves to a self-contained script.",
+            "type": "string"
+          },
+          "description": {
+            "description": "Ignored — set the workflow description in the script's `meta` block.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Ignored — set the workflow title in the script's `meta` block.",
+            "type": "string"
+          },
+          "args": {
+            "description": "Optional input value exposed to the script as the ... <Truncated in logs> ...erized named workflows (e.g. a research question)."
+          },
+          "scriptPath": {
+            "description": "Path to a workflow script file on disk. Every Work... <Truncated in logs> ...script. Takes precedence over `script` and `name`.",
+            "type": "string"
+          },
+          "resumeFromRunId": {
+            "description": "Run ID of a prior Workflow invocation to resume fr... <Truncated in logs> ...op the prior run first (TaskStop) before resuming.",
+            "type": "string",
+            "pattern": "^wf_[a-z0-9-]{6,}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "Write",
+      "description": "Writes a file to the local filesystem, overwriting... <Truncated in logs> ... will fail. For partial changes, use Edit instead.",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "description": "The absolute path to the file to write (must be absolute, not relative)",
+            "type": "string"
+          },
+          "content": {
+            "description": "The content to write to the file",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_path",
+          "content"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "mcp__ide__executeCode",
+      "description": "Execute python code in the Jupyter kernel for the ... <Truncated in logs> ...is tool, unless the kernel\n    has been restarted.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The code to be executed on the kernel."
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "mcp__ide__getDiagnostics",
+      "description": "Get language diagnostics from VS Code",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "Optional file URI to get diagnostics for. If not provided, gets diagnostics for all files."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  ],
+  "metadata": {
+    "user_id": "{\"device_id\":\"813c97dbccf556d34f66c9745969e9ae35b8... <Truncated in logs> ...ession_id\":\"03123624-fada-4c1d-858e-da1f36237e71\"}"
+  },
+  "max_tokens": 32000,
+  "output_config": {
+    "effort": "high"
+  },
+  "stream": true
+}
