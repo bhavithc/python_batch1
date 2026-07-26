@@ -2,7 +2,7 @@ import gradio as gr
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="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",
+    api_key="",
     base_url="https://openrouter.ai/api/v1",
 )
 
