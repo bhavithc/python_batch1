@@ -1,1 +1,7 @@
 .venv
+creds.py
+Creds.py
+.vscode
+__pycache__
+__pycache__/
+*.py[cod]
