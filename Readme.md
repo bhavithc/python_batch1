@@ -69,10 +69,14 @@
       - [ ] Return the second largest unique number in a list.
 
 ### Advance topics 
-- [ ] OOPS
-  - [ ] Classes and Objects 
-  - [ ] Inheritance and super
-  - [ ] Dunder (Double UNDERscore) methods and data classes 
+- [x] OOPS
+  - [x] Classes and Objects 
+  - [x] Inheritance and super
+  - [x] Dunder (Double UNDERscore) methods and data classes
+  - [x] Modules and packages
+  - [ ] Error Handling
+  - [ ] Files & I/O
+  - [ ] .env
 
 ### AI Topics 
 - [ ] What is AI 
