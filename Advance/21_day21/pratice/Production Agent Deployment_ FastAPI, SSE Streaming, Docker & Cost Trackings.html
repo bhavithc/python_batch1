@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<!-- saved from url=(0140)file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Production Agent Deployment: FastAPI, SSE Streaming, Docker &amp; Cost Tracking</title>
+  <script src="./Production Agent Deployment_ FastAPI, SSE Streaming, Docker &amp; Cost Tracking_files/saved_resource"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async="" src="./Production Agent Deployment_ FastAPI, SSE Streaming, Docker &amp; Cost Tracking_files/tex-mml-chtml.js"></script>
+  <link href="./Production Agent Deployment_ FastAPI, SSE Streaming, Docker &amp; Cost Tracking_files/css2" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'Fira Code', monospace; }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mt-1{margin-top:0.25rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-3\.5{height:0.875rem}.h-9{height:2.25rem}.min-h-screen{min-height:100vh}.w-3\.5{width:0.875rem}.w-9{width:2.25rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-16 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(4rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(4rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-amber-800\/40{border-color:rgb(146 64 14 / 0.4)}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-emerald-800{--tw-border-opacity:1;border-color:rgb(6 95 70 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-amber-950\/40{background-color:rgb(69 26 3 / 0.4)}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-emerald-950{--tw-bg-opacity:1;background-color:rgb(2 44 34 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/95{background-color:rgb(2 6 23 / 0.95)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-emerald-950\/70{--tw-gradient-from:rgb(2 44 34 / 0.7) var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 44 34 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-slate-900{--tw-gradient-to:rgb(15 23 42 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #0f172a var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-indigo-950\/50{--tw-gradient-to:rgb(30 27 75 / 0.5) var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-32{padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pt-10{padding-top:2.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.selection\:bg-indigo-500 *::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-indigo-500::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-base{font-size:1rem;line-height:1.5rem}}</style><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msub {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D442.TEX-I::before {
+  padding: 0.704em 0.763em 0.022em 0;
+  content: "O";
+}
+
+mjx-c.mjx-c28::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c1D441.TEX-I::before {
+  padding: 0.683em 0.888em 0 0;
+  content: "N";
+}
+
+mjx-c.mjx-c29::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: ")";
+}
+
+mjx-c.mjx-c1D452.TEX-I::before {
+  padding: 0.442em 0.466em 0.011em 0;
+  content: "e";
+}
+
+mjx-c.mjx-c1D465.TEX-I::before {
+  padding: 0.442em 0.572em 0.011em 0;
+  content: "x";
+}
+
+mjx-c.mjx-c1D461.TEX-I::before {
+  padding: 0.626em 0.361em 0.011em 0;
+  content: "t";
+}
+
+mjx-c.mjx-c1D436.TEX-I::before {
+  padding: 0.705em 0.76em 0.022em 0;
+  content: "C";
+}
+
+mjx-c.mjx-c1D45C.TEX-I::before {
+  padding: 0.441em 0.485em 0.011em 0;
+  content: "o";
+}
+
+mjx-c.mjx-c1D460.TEX-I::before {
+  padding: 0.442em 0.469em 0.01em 0;
+  content: "s";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c1D447.TEX-I::before {
+  padding: 0.677em 0.704em 0 0;
+  content: "T";
+}
+
+mjx-c.mjx-c1D45A.TEX-I::before {
+  padding: 0.442em 0.878em 0.011em 0;
+  content: "m";
+}
+
+mjx-c.mjx-c1D44F.TEX-I::before {
+  padding: 0.694em 0.429em 0.011em 0;
+  content: "b";
+}
+
+mjx-c.mjx-c1D456.TEX-I::before {
+  padding: 0.661em 0.345em 0.011em 0;
+  content: "i";
+}
+
+mjx-c.mjx-c1D443.TEX-I::before {
+  padding: 0.683em 0.751em 0 0;
+  content: "P";
+}
+
+mjx-c.mjx-c2B::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "+";
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c1D462.TEX-I::before {
+  padding: 0.442em 0.572em 0.011em 0;
+  content: "u";
+}
+</style></head>
+<body class="bg-slate-900 text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white pb-32">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-600 text-white font-black text-sm shadow-lg">
+          OPS
+        </span>
+        <div>
+          <h1 class="text-base font-bold text-white leading-none">Deploying Your Agent: Production Engineering</h1>
+          <p class="text-xs text-slate-400 mt-1">FastAPI Wrapper • Streaming SSE • Docker Multi-Stage • Real-Time Cost Tracking</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 text-xs overflow-x-auto py-1">
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html#fastapi" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">1. FastAPI Wrapper</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html#streaming" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">2. Streaming SSE</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html#costs" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">3. Cost Tracking</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html#docker" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">4. Docker &amp; Networking</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/1D446F6F-919E-4BB9-9680-92D029217895/deploying_agent_fastapi_docker_sse.html#code" class="px-2.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition">5. Full App Code</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-6 pt-10 space-y-16">
+
+    <!-- Overview Banner -->
+    <div class="bg-gradient-to-r from-emerald-950/70 via-slate-900 to-indigo-950/50 p-8 rounded-2xl border border-emerald-500/30 shadow-2xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-4 border border-emerald-500/30">
+        Enterprise Deployment Blueprint
+      </div>
+      <h2 class="text-3xl font-extrabold text-white tracking-tight mb-4">
+        Deploying Your LMStudio Local RAG Agent to Production
+      </h2>
+      <p class="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
+        Taking an in-memory script with <code>text-embedding-bge-small-en-v1.5</code> and <code>qwen2.5-0.5b-instruct-mlx</code> and turning it into an enterprise microservice requires four operational upgrades: an async FastAPI API layer, token-by-token Server-Sent Events (SSE), real-time cost computation (local vs. cloud parity), and a hardened container build.
+      </p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 1: FASTAPI WRAPPER ARCHITECTURE -->
+    <!-- ========================================================= -->
+    <section id="fastapi" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-emerald-400 bg-emerald-950 px-3 py-1 rounded-lg border border-emerald-800">Module 1</span>
+        <h2 class="text-2xl font-bold text-white">FastAPI Wrapper &amp; Lifespan Indexing</h2>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Instead of re-computing embeddings on every HTTP request or running them in blocking scripts, production agents use FastAPI's asynchronous <code>lifespan</code> event to pre-calculate document chunk vectors into memory when Uvicorn boots.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">Async Client (`AsyncOpenAI`)</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Standard <code>OpenAI()</code> is synchronous and blocks the Python event loop. By using <code>AsyncOpenAI(base_url="http://host.docker.internal:1234/v1")</code> with <code>await</code>, the FastAPI server can concurrently handle dozens of incoming student questions without thread deadlocks.
+          </p>
+        </div>
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">Lifespan Pre-Indexing</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Vector embeddings for your knowledge base are calculated strictly once during application startup. The warm <code>doc_embeddings</code> numpy matrix remains pinned in memory for instantaneous <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 123.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> dot products during user requests.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 2: STREAMING SSE MECHANICS -->
+    <!-- ========================================================= -->
+    <section id="streaming" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-emerald-400 bg-emerald-950 px-3 py-1 rounded-lg border border-emerald-800">Module 2</span>
+        <h2 class="text-2xl font-bold text-white">Streaming Server-Sent Events (SSE)</h2>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Why use SSE instead of WebSockets or standard JSON? LLMs generate answers token-by-token. Waiting 5 seconds for a complete answer causes high perceived latency (Time-to-First-Token). SSE streams text chunks over plain HTTP as soon as they emerge from the local LMStudio GPU/CPU buffer.
+      </p>
+
+      <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+        <h3 class="font-bold text-white text-base">SSE Wire Protocol Specification</h3>
+        <p class="text-slate-400 text-xs leading-relaxed">
+          The HTTP response header must be <code>text/event-stream</code>. Each chunk is prefixed with <code>data: </code> and terminated by a double newline (<code>
+
+</code>). Crucially, <code>X-Accel-Buffering: no</code> tells reverse proxies (Nginx, Traefik, AWS ALB) not to buffer tokens.
+        </p>
+        <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 text-xs font-mono text-slate-300 space-y-1">
+          <div class="text-emerald-400">data: {"event": "retrieval", "data": {"matched_index": 1, "similarity": 0.8421}}</div>
+          <div class="text-slate-500">
+
+</div>
+          <div class="text-indigo-400">data: {"event": "token", "data": "Professor"}</div>
+          <div class="text-slate-500">
+
+</div>
+          <div class="text-indigo-400">data: {"event": "token", "data": " Ada"}</div>
+          <div class="text-slate-500">
+
+</div>
+          <div class="text-amber-400">data: {"event": "metrics", "data": {"tokens": 42, "cost_saved_usd": 0.00021}}</div>
+          <div class="text-slate-500">
+
+</div>
+          <div class="text-rose-400">data: [DONE]</div>
+          <div class="text-slate-500">
+
+</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 3: ACCURATE COST TRACKING -->
+    <!-- ========================================================= -->
+    <section id="costs" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-emerald-400 bg-emerald-950 px-3 py-1 rounded-lg border border-emerald-800">Module 3</span>
+        <h2 class="text-2xl font-bold text-white">Local Token Tracking &amp; Equivalent Cloud Cost Savings</h2>
+      </div>
+
+      <div class="prose text-slate-300 text-sm leading-relaxed space-y-3">
+        <p>
+          Running models locally on LMStudio is <strong>$0.00 in cloud inference API fees</strong>. However, enterprise stakeholders always require telemetry: <em>"How many tokens were processed, and how much money did our local GPU/workstation save vs. calling OpenAI / OpenRouter?"</em>
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">Client-Side Tokenization via Tiktoken</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Local embedding endpoints often do not return token usage. We count embedding and prompt tokens using BPE tokenization (`tiktoken` / `cl100k_base`):
+          </p>
+          <pre class="bg-slate-900 p-3 rounded text-xs text-slate-300 overflow-x-auto"><code>import tiktoken
+
+enc = tiktoken.get_encoding("cl100k_base")
+tokens_count = len(enc.encode(user_question))</code></pre>
+        </div>
+
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">Cost Calculation Formula</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            We map each request against comparable cloud rates (e.g. OpenAI / OpenRouter baseline rates):
+          </p>
+          <div class="bg-slate-900 p-3 rounded text-center text-xs text-emerald-300 font-mono">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="1" style="font-size: 123.8%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D436 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.12em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44F TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D443 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.109em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44F TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.12em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D443 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.109em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2B"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.12em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D462 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D460 TEX-I"></mjx-c></mjx-mi><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D443 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.109em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45C TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D462 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-texatom></mjx-script></mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>C</mi><mi>o</mi><mi>s</mi><mi>t</mi></mrow><mo>=</mo><mo stretchy="false">(</mo><msub><mi>T</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>m</mi><mi>b</mi></mrow></mrow></msub><mi>i</mi><mi>m</mi><mi>e</mi><mi>s</mi><msub><mi>P</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>m</mi><mi>b</mi></mrow></mrow></msub><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><msub><mi>T</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>i</mi><mi>n</mi></mrow></mrow></msub><mi>i</mi><mi>m</mi><mi>e</mi><mi>s</mi><msub><mi>P</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>i</mi><mi>n</mi></mrow></mrow></msub><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><msub><mi>T</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mrow></msub><mi>i</mi><mi>m</mi><mi>e</mi><mi>s</mi><msub><mi>P</mi><mrow data-mjx-texclass="ORD"><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mrow></msub><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            We stream this metadata in the final SSE <code>metrics</code> event so frontend dashboards can display real-time cumulative savings.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 4: COMPLETE EXECUTABLE APP.PY -->
+    <!-- ========================================================= -->
+    <section id="code" class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-emerald-400 bg-emerald-950 px-3 py-1 rounded-lg border border-emerald-800">Module 4</span>
+          <h2 class="text-2xl font-bold text-white">Full Production Code (`app.py`)</h2>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById(&#39;fullCode&#39;).innerText); alert(&#39;Copied app.py to clipboard!&#39;);" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition shadow flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          Copy app.py
+        </button>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+        <div class="bg-slate-900/80 px-4 py-2 border-b border-slate-800 text-xs font-mono text-slate-400 flex items-center justify-between">
+          <span>app.py</span>
+          <span>FastAPI + Streaming SSE + LMStudio Async + Cost Tracking</span>
+        </div>
+        <pre class="p-6 text-xs text-slate-200 overflow-x-auto leading-relaxed"><code id="fullCode"><span class="text-indigo-400">import</span> os
+<span class="text-indigo-400">import</span> json
+<span class="text-indigo-400">import</span> numpy <span class="text-indigo-400">as</span> np
+<span class="text-indigo-400">import</span> tiktoken
+<span class="text-indigo-400">from</span> typing <span class="text-indigo-400">import</span> AsyncGenerator
+<span class="text-indigo-400">from</span> contextlib <span class="text-indigo-400">import</span> asynccontextmanager
+<span class="text-indigo-400">from</span> fastapi <span class="text-indigo-400">import</span> FastAPI, HTTPException
+<span class="text-indigo-400">from</span> fastapi.responses <span class="text-indigo-400">import</span> StreamingResponse
+<span class="text-indigo-400">from</span> pydantic <span class="text-indigo-400">import</span> BaseModel, Field
+<span class="text-indigo-400">from</span> openai <span class="text-indigo-400">import</span> AsyncOpenAI
+
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-slate-500"># 1. Environment &amp; Comparable Baseline Cloud Pricing</span>
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+LMSTUDIO_BASE_URL = os.getenv(<span class="text-emerald-300">"LMSTUDIO_BASE_URL"</span>, <span class="text-emerald-300">"http://localhost:1234/v1"</span>)
+EMBEDDING_MODEL = os.getenv(<span class="text-emerald-300">"EMBEDDING_MODEL"</span>, <span class="text-emerald-300">"text-embedding-bge-small-en-v1.5"</span>)
+COMPLETION_MODEL = os.getenv(<span class="text-emerald-300">"COMPLETION_MODEL"</span>, <span class="text-emerald-300">"qwen2.5-0.5b-instruct-mlx"</span>)
+
+<span class="text-slate-500"># Reference cloud costs per 1,000,000 tokens for ROI/Savings tracking</span>
+CLOUD_PRICING = {
+    <span class="text-emerald-300">"embedding_per_1m"</span>: <span class="text-purple-400">0.02</span>,       <span class="text-slate-500"># Cloud embedding equivalent</span>
+    <span class="text-emerald-300">"prompt_per_1m"</span>: <span class="text-purple-400">0.15</span>,          <span class="text-slate-500"># Cloud prompt input equivalent</span>
+    <span class="text-emerald-300">"completion_per_1m"</span>: <span class="text-purple-400">0.60</span>      <span class="text-slate-500"># Cloud completion token equivalent</span>
+}
+
+<span class="text-slate-500"># Initialize Async client targeting local workstation daemon</span>
+client = AsyncOpenAI(
+    api_key=os.getenv(<span class="text-emerald-300">"OPENROUTER_API_KEY"</span>, <span class="text-emerald-300">"local-lmstudio"</span>),
+    base_url=LMSTUDIO_BASE_URL
+)
+tokenizer = tiktoken.get_encoding(<span class="text-emerald-300">"cl100k_base"</span>)
+
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-slate-500"># 2. Knowledge Base &amp; Vector Utility Functions</span>
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+documents = [
+    <span class="text-emerald-300">"Grading Policy: Midterm exams account for 30%, homework assignments 20%, and the final engineering project 50%."</span>,
+    <span class="text-emerald-300">"Office Hours: Professor Ada conducts technical office hours on Tuesdays and Thursdays from 2:00 PM to 4:00 PM in Room 302."</span>,
+    <span class="text-emerald-300">"Late Submission Policy: Deliverables submitted within 24 hours past deadline incur an automatic 10% grade deduction. Zero submissions accepted thereafter."</span>,
+    <span class="text-emerald-300">"Prerequisites: Students must complete CS101 (Intro to Systems Programming) with a grade of C or higher prior to enrollment."</span>
+]
+doc_embeddings: list[np.ndarray] = []
+
+<span class="text-indigo-400">async def</span> <span class="text-amber-300">get_embedding</span>(text: str) -&gt; np.ndarray:
+    res = <span class="text-indigo-400">await</span> client.embeddings.create(model=EMBEDDING_MODEL, input=text)
+    <span class="text-indigo-400">return</span> np.array(res.data[<span class="text-purple-400">0</span>].embedding, dtype=np.float32)
+
+<span class="text-indigo-400">def</span> <span class="text-amber-300">cosine_similarity</span>(a: np.ndarray, b: np.ndarray) -&gt; float:
+    norm_product = np.linalg.norm(a) * np.linalg.norm(b)
+    <span class="text-indigo-400">if</span> norm_product == <span class="text-purple-400">0</span>:
+        <span class="text-indigo-400">return</span> <span class="text-purple-400">0.0</span>
+    <span class="text-indigo-400">return</span> float(np.dot(a, b) / norm_product)
+
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-slate-500"># 3. Application Lifespan (Pre-compute document embeddings once)</span>
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-indigo-400">@asynccontextmanager</span>
+<span class="text-indigo-400">async def</span> <span class="text-amber-300">lifespan</span>(app: FastAPI):
+    <span class="text-indigo-400">global</span> doc_embeddings
+    print(f<span class="text-emerald-300">"[Startup] Indexing knowledge base against LMStudio at {LMSTUDIO_BASE_URL}..."</span>)
+    doc_embeddings = []
+    <span class="text-indigo-400">for</span> doc <span class="text-indigo-400">in</span> documents:
+        emb = <span class="text-indigo-400">await</span> get_embedding(doc)
+        doc_embeddings.append(emb)
+    print(f<span class="text-emerald-300">"[Startup] Successfully indexed {len(doc_embeddings)} chunks in memory.\n"</span>)
+    <span class="text-indigo-400">yield</span>
+
+app = FastAPI(title=<span class="text-emerald-300">"Local RAG Agent API"</span>, version=<span class="text-emerald-300">"1.0.0"</span>, lifespan=lifespan)
+
+<span class="text-indigo-400">class</span> <span class="text-amber-300">QueryRequest</span>(BaseModel):
+    question: str = Field(..., example=<span class="text-emerald-300">"When can I meet with the instructor in person?"</span>)
+
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-slate-500"># 4. Asynchronous SSE Generator with Integrated Cost Telemetry</span>
+<span class="text-slate-500"># -------------------------------------------------------------</span>
+<span class="text-indigo-400">async def</span> <span class="text-amber-300">stream_rag_pipeline</span>(question: str) -&gt; AsyncGenerator[str, None]:
+    <span class="text-slate-500"># Step A: RETRIEVE</span>
+    query_emb = <span class="text-indigo-400">await</span> get_embedding(question)
+    similarities = [cosine_similarity(query_emb, doc_vec) <span class="text-indigo-400">for</span> doc_vec <span class="text-indigo-400">in</span> doc_embeddings]
+    best_idx = int(np.argmax(similarities))
+    best_score = similarities[best_idx]
+    retrieved_chunk = documents[best_idx]
+
+    <span class="text-slate-500"># Token tracking for Retrieval</span>
+    emb_tokens = len(tokenizer.encode(question))
+    emb_cost_equiv = (emb_tokens / <span class="text-purple-400">1_000_000</span>) * CLOUD_PRICING[<span class="text-emerald-300">"embedding_per_1m"</span>]
+
+    <span class="text-slate-500"># Emit Retrieval Metadata Event</span>
+    retrieval_meta = {
+        <span class="text-emerald-300">"event"</span>: <span class="text-emerald-300">"retrieval"</span>,
+        <span class="text-emerald-300">"data"</span>: {
+            <span class="text-emerald-300">"matched_chunk"</span>: retrieved_chunk,
+            <span class="text-emerald-300">"similarity"</span>: round(best_score, <span class="text-purple-400">4</span>),
+            <span class="text-emerald-300">"embedding_tokens"</span>: emb_tokens
+        }
+    }
+    <span class="text-indigo-400">yield</span> f<span class="text-emerald-300">"data: {json.dumps(retrieval_meta)}\n\n"</span>
+
+    <span class="text-slate-500"># Step B: AUGMENT</span>
+    system_prompt = (
+        <span class="text-emerald-300">"You are an authoritative enterprise academic assistant. "</span>
+        <span class="text-emerald-300">"Synthesize responses strictly and exclusively from the provided context. "</span>
+        <span class="text-emerald-300">"If absent, state: 'I do not have sufficient information in the provided documentation.'"</span>
+    )
+    user_prompt = f<span class="text-emerald-300">"Context:\n{retrieved_chunk}\n\nQuestion: {question}"</span>
+    prompt_tokens = len(tokenizer.encode(system_prompt + user_prompt))
+
+    <span class="text-slate-500"># Step C: GENERATE (Token Streaming)</span>
+    stream = <span class="text-indigo-400">await</span> client.chat.completions.create(
+        model=COMPLETION_MODEL,
+        messages=[
+            {<span class="text-emerald-300">"role"</span>: <span class="text-emerald-300">"system"</span>, <span class="text-emerald-300">"content"</span>: system_prompt},
+            {<span class="text-emerald-300">"role"</span>: <span class="text-emerald-300">"user"</span>, <span class="text-emerald-300">"content"</span>: user_prompt}
+        ],
+        temperature=<span class="text-purple-400">0.0</span>,
+        max_tokens=<span class="text-purple-400">120</span>,
+        stream=<span class="text-purple-400">True</span>
+    )
+
+    completion_tokens = <span class="text-purple-400">0</span>
+    <span class="text-indigo-400">async for</span> chunk <span class="text-indigo-400">in</span> stream:
+        <span class="text-indigo-400">if</span> chunk.choices <span class="text-indigo-400">and</span> len(chunk.choices) &gt; <span class="text-purple-400">0</span>:
+            delta = chunk.choices[<span class="text-purple-400">0</span>].delta.content
+            <span class="text-indigo-400">if</span> delta:
+                completion_tokens += len(tokenizer.encode(delta))
+                token_event = {<span class="text-emerald-300">"event"</span>: <span class="text-emerald-300">"token"</span>, <span class="text-emerald-300">"data"</span>: delta}
+                <span class="text-indigo-400">yield</span> f<span class="text-emerald-300">"data: {json.dumps(token_event)}\n\n"</span>
+
+    <span class="text-slate-500"># Step D: Final Telemetry Event</span>
+    prompt_cost_equiv = (prompt_tokens / <span class="text-purple-400">1_000_000</span>) * CLOUD_PRICING[<span class="text-emerald-300">"prompt_per_1m"</span>]
+    completion_cost_equiv = (completion_tokens / <span class="text-purple-400">1_000_000</span>) * CLOUD_PRICING[<span class="text-emerald-300">"completion_per_1m"</span>]
+    total_savings_usd = emb_cost_equiv + prompt_cost_equiv + completion_cost_equiv
+
+    metrics_payload = {
+        <span class="text-emerald-300">"event"</span>: <span class="text-emerald-300">"metrics"</span>,
+        <span class="text-emerald-300">"data"</span>: {
+            <span class="text-emerald-300">"local_inference_cost_usd"</span>: <span class="text-purple-400">0.0</span>,
+            <span class="text-emerald-300">"tokens_processed"</span>: {
+                <span class="text-emerald-300">"embedding_tokens"</span>: emb_tokens,
+                <span class="text-emerald-300">"prompt_tokens"</span>: prompt_tokens,
+                <span class="text-emerald-300">"completion_tokens"</span>: completion_tokens,
+                <span class="text-emerald-300">"total_tokens"</span>: emb_tokens + prompt_tokens + completion_tokens
+            },
+            <span class="text-emerald-300">"equivalent_cloud_cost_saved_usd"</span>: round(total_savings_usd, <span class="text-purple-400">8</span>)
+        }
+    }
+    <span class="text-indigo-400">yield</span> f<span class="text-emerald-300">"data: {json.dumps(metrics_payload)}\n\n"</span>
+    <span class="text-indigo-400">yield</span> <span class="text-emerald-300">"data: [DONE]\n\n"</span>
+
+<span class="text-indigo-400">@app.post</span>(<span class="text-emerald-300">"/api/v1/chat"</span>)
+<span class="text-indigo-400">async def</span> <span class="text-amber-300">chat_endpoint</span>(request: QueryRequest):
+    <span class="text-indigo-400">return</span> StreamingResponse(
+        stream_rag_pipeline(request.question),
+        media_type=<span class="text-emerald-300">"text/event-stream"</span>,
+        headers={
+            <span class="text-emerald-300">"Cache-Control"</span>: <span class="text-emerald-300">"no-cache"</span>,
+            <span class="text-emerald-300">"Connection"</span>: <span class="text-emerald-300">"keep-alive"</span>,
+            <span class="text-emerald-300">"X-Accel-Buffering"</span>: <span class="text-emerald-300">"no"</span>
+        }
+    )
+
+<span class="text-indigo-400">@app.get</span>(<span class="text-emerald-300">"/healthz"</span>)
+<span class="text-indigo-400">async def</span> <span class="text-amber-300">health</span>():
+    <span class="text-indigo-400">return</span> {<span class="text-emerald-300">"status"</span>: <span class="text-emerald-300">"healthy"</span>, <span class="text-emerald-300">"chunks_indexed"</span>: len(doc_embeddings)}</code></pre>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 5: DOCKER MULTI-STAGE & CONTAINER NETWORKING -->
+    <!-- ========================================================= -->
+    <section id="docker" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-emerald-400 bg-emerald-950 px-3 py-1 rounded-lg border border-emerald-800">Module 5</span>
+        <h2 class="text-2xl font-bold text-white">Docker Multi-Stage Build &amp; LMStudio Networking</h2>
+      </div>
+
+      <div class="prose text-slate-300 text-sm leading-relaxed space-y-3">
+        <p>
+          <strong>The Docker Networking Gotcha with LMStudio:</strong> When your FastAPI app runs inside a Docker container, <code>localhost:1234</code> refers to the <em>container itself</em>, not your Mac/Windows host machine! 
+        </p>
+        <div class="p-4 rounded-lg bg-amber-950/40 border border-amber-800/40 text-xs text-amber-200">
+          <strong>Crucial Fix:</strong> Point the environment variable to <code>http://host.docker.internal:1234/v1</code> so the containerized FastAPI app can seamlessly connect to your LMStudio instance on the host machine.
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Dockerfile -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-base">Dockerfile (Multi-Stage)</h3>
+            <span class="text-xs text-emerald-400 font-mono">Non-Root User</span>
+          </div>
+          <pre class="bg-slate-900 p-3 rounded text-xs text-slate-300 overflow-x-auto"><code># Stage 1: Build dependencies
+FROM python:3.11-slim AS builder
+WORKDIR /build
+
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends     build-essential &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Stage 2: Minimal runtime image
+FROM python:3.11-slim AS runner
+WORKDIR /app
+
+# Run as non-root user for production security
+RUN useradd -m appuser
+USER appuser
+
+COPY --from=builder /root/.local /home/appuser/.local
+ENV PATH=/home/appuser/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+
+COPY app.py .
+EXPOSE 8000
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre>
+        </div>
+
+        <!-- Requirements & Run Commands -->
+        <div class="space-y-4">
+          <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-base">requirements.txt</h3>
+            <pre class="bg-slate-900 p-3 rounded text-xs text-slate-300"><code>fastapi&gt;=0.110.0
+uvicorn[standard]&gt;=0.28.0
+openai&gt;=1.14.0
+numpy&gt;=1.26.0
+tiktoken&gt;=0.6.0
+pydantic&gt;=2.6.0</code></pre>
+          </div>
+
+          <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-base">Terminal Commands</h3>
+            <pre class="bg-slate-900 p-3 rounded text-xs text-slate-300 overflow-x-auto"><code># 1. Build Image
+docker build -t local-rag-agent:1.0 .
+
+# 2. Run Container (Routing to host LMStudio)
+docker run -d   -p 8000:8000   -e LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1"   --name rag-api   local-rag-agent:1.0
+
+# 3. Stream from endpoint via cURL
+curl -N -X POST http://localhost:8000/api/v1/chat   -H "Content-Type: application/json"   -d '{"question": "When can I meet with the instructor in person?"}'</code></pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+</body></html>

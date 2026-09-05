@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<!-- saved from url=(0145)file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Production RAG &amp; Vector Search Architecture: Engineering Masterclass</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="./Production RAG &amp; Vector Search Architecture_ Engineering Masterclass_files/saved_resource"></script>
+  <!-- MathJax Configuration & Loader -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async="" src="./Production RAG &amp; Vector Search Architecture_ Engineering Masterclass_files/tex-mml-chtml.js"></script>
+  <link href="./Production RAG &amp; Vector Search Architecture_ Engineering Masterclass_files/css2" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'Fira Code', monospace; }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mt-1{margin-top:0.25rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-2\.5{height:0.625rem}.h-3\.5{height:0.875rem}.h-9{height:2.25rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-3\.5{width:0.875rem}.w-9{width:2.25rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.list-disc{list-style-type:disc}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-20 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-emerald-900\/40{border-color:rgb(6 78 59 / 0.4)}.border-indigo-500\/30{border-color:rgb(99 102 241 / 0.3)}.border-indigo-800{--tw-border-opacity:1;border-color:rgb(55 48 163 / var(--tw-border-opacity, 1))}.border-indigo-800\/40{border-color:rgb(55 48 163 / 0.4)}.border-rose-900\/40{border-color:rgb(136 19 55 / 0.4)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-indigo-500\/20{background-color:rgb(99 102 241 / 0.2)}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-indigo-950{--tw-bg-opacity:1;background-color:rgb(30 27 75 / var(--tw-bg-opacity, 1))}.bg-indigo-950\/40{background-color:rgb(30 27 75 / 0.4)}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/95{background-color:rgb(2 6 23 / 0.95)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-indigo-950\/70{--tw-gradient-from:rgb(30 27 75 / 0.7) var(--tw-gradient-from-position);--tw-gradient-to:rgb(30 27 75 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-slate-900{--tw-gradient-to:rgb(15 23 42 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #0f172a var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-purple-950\/50{--tw-gradient-to:rgb(59 7 100 / 0.5) var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-32{padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pl-4{padding-left:1rem}.pl-5{padding-left:1.25rem}.pt-10{padding-top:2.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-indigo-200{--tw-text-opacity:1;color:rgb(199 210 254 / var(--tw-text-opacity, 1))}.text-indigo-300{--tw-text-opacity:1;color:rgb(165 180 252 / var(--tw-text-opacity, 1))}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.selection\:bg-indigo-500 *::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-indigo-500::selection{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-base{font-size:1rem;line-height:1.5rem}}</style><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-msub {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msqrt {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-root {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+mjx-surd {
+  display: inline-block;
+  vertical-align: top;
+}
+
+mjx-sqrt {
+  display: inline-block;
+  padding-top: .07em;
+}
+
+mjx-sqrt > mjx-box {
+  border-top: .07em solid;
+}
+
+mjx-sqrt.mjx-tall > mjx-box {
+  padding-left: .3em;
+  margin-left: -.3em;
+}
+
+mjx-munderover {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-munderover:not([limits="false"]) {
+  padding-top: .1em;
+}
+
+mjx-munderover:not([limits="false"]) > * {
+  display: block;
+}
+
+mjx-msubsup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-script {
+  display: inline-block;
+  padding-right: .05em;
+  padding-left: .033em;
+}
+
+mjx-script > mjx-spacer {
+  display: block;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mspace {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-stretchy-v.mjx-c221A mjx-beg mjx-c::before {
+  content: "\E001";
+  padding: 0.605em 1.056em 0.014em 0;
+}
+
+mjx-stretchy-v.mjx-c221A mjx-ext mjx-c::before {
+  content: "\E000";
+  width: 1.056em;
+}
+
+mjx-stretchy-v.mjx-c221A mjx-end mjx-c::before {
+  content: "\23B7";
+  padding: 0.935em 1.056em 0.885em 0;
+}
+
+mjx-stretchy-v.mjx-c221A > mjx-end {
+  margin-top: -1.82em;
+}
+
+mjx-stretchy-v.mjx-c221A > mjx-ext {
+  border-top-width: 0.589em;
+  border-bottom-width: 1.79em;
+}
+
+mjx-c.mjx-c1D442.TEX-I::before {
+  padding: 0.704em 0.763em 0.022em 0;
+  content: "O";
+}
+
+mjx-c.mjx-c28::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c1D441.TEX-I::before {
+  padding: 0.683em 0.888em 0 0;
+  content: "N";
+}
+
+mjx-c.mjx-c29::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: ")";
+}
+
+mjx-c.mjx-c1D43F.TEX-I::before {
+  padding: 0.683em 0.681em 0 0;
+  content: "L";
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+
+mjx-c.mjx-c1D451.TEX-I::before {
+  padding: 0.694em 0.52em 0.01em 0;
+  content: "d";
+}
+
+mjx-c.mjx-c1D41A.TEX-B::before {
+  padding: 0.453em 0.559em 0.006em 0;
+  content: "a";
+}
+
+mjx-c.mjx-c2C::before {
+  padding: 0.121em 0.278em 0.194em 0;
+  content: ",";
+}
+
+mjx-c.mjx-c1D41B.TEX-B::before {
+  padding: 0.694em 0.639em 0.006em 0;
+  content: "b";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c2016::before {
+  padding: 0.75em 0.5em 0.25em 0;
+  content: "\2225";
+}
+
+mjx-c.mjx-c2212::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "\2212";
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c2211.TEX-S2::before {
+  padding: 0.95em 1.444em 0.45em 0;
+  content: "\2211";
+}
+
+mjx-c.mjx-c1D456.TEX-I::before {
+  padding: 0.661em 0.345em 0.011em 0;
+  content: "i";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c1D44E.TEX-I::before {
+  padding: 0.441em 0.529em 0.01em 0;
+  content: "a";
+}
+
+mjx-c.mjx-c1D44F.TEX-I::before {
+  padding: 0.694em 0.429em 0.011em 0;
+  content: "b";
+}
+
+mjx-c.mjx-c63::before {
+  padding: 0.448em 0.444em 0.011em 0;
+  content: "c";
+}
+
+mjx-c.mjx-c6F::before {
+  padding: 0.448em 0.5em 0.01em 0;
+  content: "o";
+}
+
+mjx-c.mjx-c73::before {
+  padding: 0.448em 0.394em 0.011em 0;
+  content: "s";
+}
+
+mjx-c.mjx-c2061::before {
+  padding: 0 0 0 0;
+  content: "";
+}
+
+mjx-c.mjx-c210E.TEX-I::before {
+  padding: 0.694em 0.576em 0.011em 0;
+  content: "h";
+}
+
+mjx-c.mjx-c1D452.TEX-I::before {
+  padding: 0.442em 0.466em 0.011em 0;
+  content: "e";
+}
+
+mjx-c.mjx-c1D461.TEX-I::before {
+  padding: 0.626em 0.361em 0.011em 0;
+  content: "t";
+}
+
+mjx-c.mjx-c35::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "5";
+}
+
+mjx-c.mjx-c33::before {
+  padding: 0.665em 0.5em 0.022em 0;
+  content: "3";
+}
+
+mjx-c.mjx-c36::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "6";
+}
+
+mjx-c.mjx-c2E::before {
+  padding: 0.12em 0.278em 0 0;
+  content: ".";
+}
+
+mjx-c.mjx-c30::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "0";
+}
+
+mjx-c.mjx-c1D465.TEX-I::before {
+  padding: 0.442em 0.572em 0.011em 0;
+  content: "x";
+}
+
+mjx-c.mjx-c1D440.TEX-I::before {
+  padding: 0.683em 1.051em 0 0;
+  content: "M";
+}
+
+mjx-c.mjx-c1D42A.TEX-B::before {
+  padding: 0.45em 0.607em 0.194em 0;
+  content: "q";
+}
+
+mjx-c.mjx-c1D43E.TEX-I::before {
+  padding: 0.683em 0.889em 0 0;
+  content: "K";
+}
+
+mjx-c.mjx-c22C5::before {
+  padding: 0.31em 0.278em 0 0;
+  content: "\22C5";
+}
+
+mjx-c.mjx-c1D437.TEX-I::before {
+  padding: 0.683em 0.828em 0 0;
+  content: "D";
+}
+
+mjx-c.mjx-c6C::before {
+  padding: 0.694em 0.278em 0 0;
+  content: "l";
+}
+
+mjx-c.mjx-c67::before {
+  padding: 0.453em 0.5em 0.206em 0;
+  content: "g";
+}
+</style></head>
+<body class="bg-slate-900 text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white pb-32">
+
+  <!-- Fixed Top Header -->
+  <header class="border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-600 text-white font-black text-sm shadow-lg">
+          RAG
+        </span>
+        <div>
+          <h1 class="text-base font-bold text-white leading-none">Engineering Curriculum: RAG &amp; Vector Systems</h1>
+          <p class="text-xs text-slate-400 mt-1">Linear Algebra • NumPy Internals • Pipeline Implementation • Production Architecture</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 text-xs overflow-x-auto py-1">
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch1" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ch 1: NumPy &amp; Memory</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch2" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ch 2: Vector Math</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch3" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ch 3: Architecture</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch4" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ch 4: Reference Code</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch5" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Ch 5: Walkthrough</a>
+        <a href="file:///private/var/folders/zd/nw8nb6710zn9xfwdlwf0zlv00000gn/T/C6EED8C3-A507-4389-ADDA-EEEB07B5EF01/rag_systems_engineering_masterclass.html#ch6" class="px-2.5 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition">Ch 6: System Design</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-6 pt-10 space-y-20">
+
+    <!-- Course Overview Banner -->
+    <div class="bg-gradient-to-r from-indigo-950/70 via-slate-900 to-purple-950/50 p-8 rounded-2xl border border-indigo-500/30 shadow-2xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-4 border border-indigo-500/30">
+        Professional Technical Syllabus
+      </div>
+      <h2 class="text-3xl font-extrabold text-white tracking-tight mb-4">
+        Retrieval-Augmented Generation (RAG): Systems &amp; Mathematical Engineering
+      </h2>
+      <p class="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
+        This syllabus bridges low-level numerical computation and modern LLM application architecture. It is designed for engineers and computer science students to master vector geometry, memory alignment in numerical libraries, chunking trade-offs, and production search trade-offs without treating AI frameworks as black boxes.
+      </p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 1: NUMPY BASICS & LOW-LEVEL MEMORY INTERNALS -->
+    <!-- ========================================================= -->
+    <section id="ch1" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 1</span>
+        <h2 class="text-2xl font-bold text-white">NumPy Foundations &amp; Low-Level Memory Layout</h2>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed">
+        High-dimensional embedding operations require rapid numerical computation. Standard Python lists (<code class="text-indigo-300">PyListObject</code>) store arrays of pointers to scattered heap-allocated <code class="text-indigo-300">PyObject</code> structures, creating cache misses and pointer-chasing overhead. NumPy circumvents this through contiguous memory buffers and SIMD-accelerated C loops.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- 1.1 Memory Architecture -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-base">1.1 Contiguous Memory &amp; Strides</h3>
+            <span class="text-xs text-indigo-400 font-mono">ndarray layout</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            A NumPy array is a lightweight descriptor head containing a pointer to a single, contiguous C-memory block, a data type descriptor (<code class="text-slate-200">dtype</code>), array shape, and strides (byte jumps required to step between dimensions).
+          </p>
+          <pre class="bg-slate-900 p-3.5 rounded-lg text-xs text-slate-300 overflow-x-auto"><code>import numpy as np
+
+# 1536-dimensional vector (standard for text-embedding-3-small)
+vec = np.zeros(1536, dtype=np.float32)
+
+print("Buffer address:", vec.ctypes.data)
+print("Bytes per item:", vec.itemsize)     # 4 bytes (float32)
+print("Total memory:", vec.nbytes, "bytes") # 6144 bytes contiguous</code></pre>
+        </div>
+
+        <!-- 1.2 SIMD & Vectorized Arithmetic -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-base">1.2 Vectorized Arithmetic &amp; SIMD</h3>
+            <span class="text-xs text-indigo-400 font-mono">AVX / NEON</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            NumPy releases the Python GIL and utilizes hardware vector registers (AVX-512 on x86, NEON on ARM) to compute arithmetic operations across entire data vectors concurrently.
+          </p>
+          <pre class="bg-slate-900 p-3.5 rounded-lg text-xs text-slate-300 overflow-x-auto"><code>a = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+b = np.array([4.0, 5.0, 6.0], dtype=np.float32)
+
+# Element-wise operations executed in C
+add_res = a + b    # array([5., 7., 9.])
+mul_res = a * b    # array([4., 10., 18.])
+scale   = a * 2.0  # scalar broadcast</code></pre>
+        </div>
+
+        <!-- 1.3 Dot Product -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-base">1.3 The Dot Product Operator</h3>
+            <span class="text-xs text-indigo-400 font-mono">BLAS sdot / ddot</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            The inner product performs component-wise multiplication and accumulation, backed by optimized BLAS (Basic Linear Algebra Subprograms) routines.
+          </p>
+          <pre class="bg-slate-900 p-3.5 rounded-lg text-xs text-slate-300 overflow-x-auto"><code># Dot product using np.dot or @ matrix operator
+dot_val = np.dot(a, b)      # 32.0
+matmul_val = a @ b          # 32.0 (Preferred modern syntax)</code></pre>
+        </div>
+
+        <!-- 1.4 Norm & Argmax -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-base">1.4 Vector Norm &amp; Index Pinpointing</h3>
+            <span class="text-xs text-indigo-400 font-mono">L2 Norm &amp; np.argmax</span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            <code class="text-slate-200">np.linalg.norm</code> evaluates geometric length. <code class="text-slate-200">np.argmax</code> scans an array in <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> time to retrieve the index containing the maximal value.
+          </p>
+          <pre class="bg-slate-900 p-3.5 rounded-lg text-xs text-slate-300 overflow-x-auto"><code>sims = np.array([0.12, 0.89, 0.45, 0.76])
+best_idx = int(np.argmax(sims))  # Index: 1
+best_val = sims[best_idx]        # 0.89</code></pre>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 2: VECTOR MATHEMATICS & COSINE SIMILARITY -->
+    <!-- ========================================================= -->
+    <section id="ch2" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 2</span>
+        <h2 class="text-2xl font-bold text-white">Vector Space Geometry &amp; Similarity Metrics</h2>
+      </div>
+
+      <div class="prose text-slate-300 text-sm leading-relaxed space-y-3">
+        <p>
+          Text embedding models project variable-length natural language sequences into continuous coordinates on an <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 118.2%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></mjx-assistive-mml></mjx-container>-dimensional hypersphere. Comparing passages requires selecting an appropriate distance metric.
+        </p>
+      </div>
+
+      <!-- Deep Dive: Euclidean vs Cosine -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">The Euclidean Distance Flaw in NLP</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Euclidean (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>L</mi><mn>2</mn></msub></math></mjx-assistive-mml></mjx-container>) distance calculates absolute spatial offset:
+          </p>
+          <div class="bg-slate-900 p-3 rounded text-center text-xs text-indigo-300">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="3" style="font-size: 118.5%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41A TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-texatom space="2" texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41B TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41A TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-texatom space="3" texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41B TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msqrt space="4"><mjx-sqrt class="mjx-tall"><mjx-surd><mjx-mo class="mjx-n"><mjx-stretchy-v class="mjx-c221A" style="height: 3.6em; vertical-align: -1.05em;"><mjx-beg><mjx-c></mjx-c></mjx-beg><mjx-ext><mjx-c></mjx-c></mjx-ext><mjx-end><mjx-c></mjx-c></mjx-end><mjx-mark></mjx-mark></mjx-stretchy-v></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.451em;"><mjx-munderover><mjx-over style="padding-bottom: 0.192em; padding-left: 0.51em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-over><mjx-box><mjx-munder><mjx-row><mjx-base><mjx-mo class="mjx-lop"><mjx-c class="mjx-c2211 TEX-S2"></mjx-c></mjx-mo></mjx-base></mjx-row><mjx-row><mjx-under style="padding-top: 0.167em; padding-left: 0.148em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-under></mjx-row></mjx-munder></mjx-box></mjx-munderover><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-msub space="3"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44F TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-script style="vertical-align: 0.289em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>d</mi><mo stretchy="false">(</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">a</mi></mrow><mo>,</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">b</mi></mrow><mo stretchy="false">)</mo><mo>=</mo><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">a</mi></mrow><mo>−</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">b</mi></mrow><msub><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mn>2</mn></msub><mo>=</mo><msqrt><munderover><mo data-mjx-texclass="OP">∑</mo><mrow data-mjx-texclass="ORD"><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo stretchy="false">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>−</mo><msub><mi>b</mi><mi>i</mi></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup></msqrt></math></mjx-assistive-mml></mjx-container>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            <strong>The Document Length Bias Problem:</strong> Suppose Document A discusses <em>"Linux systems"</em> in two concise sentences. Document B discusses the exact same topic with the exact same terminology, but repeats it across 20 paragraphs. The coordinate magnitude of Document B is significantly greater, pushing them far apart in Euclidean space despite complete conceptual overlap.
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="font-bold text-white text-base">Cosine Similarity (Angular Invariance)</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Cosine similarity isolates directional alignment (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-n"><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c73"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c210E TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>cos</mi><mo data-mjx-texclass="NONE">⁡</mo><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi></math></mjx-assistive-mml></mjx-container>), evaluating whether two vectors point in the same conceptual direction regardless of magnitude:
+          </p>
+          <div class="bg-slate-900 p-3 rounded text-center text-xs text-indigo-300">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="5" style="font-size: 118.5%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-merror data-mjx-error="Cannot read properties of null (reading &#39;4&#39;)" title="Cannot read properties of null (reading &#39;4&#39;)"><mjx-mtext style="font-family: MJXZERO, serif;"><mjx-utext variant="-explicitFont" style="font-size: 84.4%; padding: 0.888em 0px 0.237em; width: 79px;">Math input error</mjx-utext></mjx-mtext></mjx-merror></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><merror data-mjx-error="Cannot read properties of null (reading &#39;4&#39;)" title="Cannot read properties of null (reading &#39;4&#39;)"><mtext>Math input error</mtext></merror></math></mjx-assistive-mml></mjx-container>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            By dividing by vector magnitudes, cosine similarity normalizes length variation, isolating topical semantics from document verbosity.
+          </p>
+        </div>
+      </div>
+
+      <!-- The Math Box & OpenAI Optimization -->
+      <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+        <h3 class="text-white font-bold text-base">Mathematical Proof: Unit Sphere Optimization</h3>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          OpenAI embedding APIs (<code class="text-indigo-300">text-embedding-3-small</code>, <code class="text-indigo-300">text-embedding-3-large</code>) return pre-normalized vectors constrained to unit length:
+        </p>
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center text-sm text-indigo-200">
+          <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="6" style="font-size: 118.2%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41A TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msqrt space="4"><mjx-sqrt class="mjx-tall"><mjx-surd><mjx-mo class="mjx-n"><mjx-stretchy-v class="mjx-c221A" style="height: 3.6em; vertical-align: -1.05em;"><mjx-beg><mjx-c></mjx-c></mjx-beg><mjx-ext><mjx-c></mjx-c></mjx-ext><mjx-end><mjx-c></mjx-c></mjx-end><mjx-mark></mjx-mark></mjx-stretchy-v></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.372em;"><mjx-munderover><mjx-over style="padding-bottom: 0.184em; padding-left: 0.015em;"><mjx-texatom size="s" texclass="ORD"><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c35"></mjx-c><mjx-c class="mjx-c33"></mjx-c><mjx-c class="mjx-c36"></mjx-c></mjx-mn></mjx-texatom></mjx-over><mjx-box><mjx-munder><mjx-row><mjx-base><mjx-mo class="mjx-lop"><mjx-c class="mjx-c2211 TEX-S2"></mjx-c></mjx-mo></mjx-base></mjx-row><mjx-row><mjx-under style="padding-top: 0.167em; padding-left: 0.148em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-texatom></mjx-under></mjx-row></mjx-munder></mjx-box></mjx-munderover><mjx-msubsup space="2"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.294em; margin-left: 0px;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-spacer style="margin-top: 0.18em;"></mjx-spacer><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D456 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-box></mjx-sqrt></mjx-msqrt><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-mstyle><mjx-mspace style="width: 1em;"></mjx-mspace></mjx-mstyle><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D452 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44E TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-texatom><mjx-mstyle><mjx-mspace style="width: 1em;"></mjx-mspace></mjx-mstyle><mjx-mo class="mjx-n"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-texatom texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D41B TEX-B"></mjx-c></mjx-mi></mjx-texatom><mjx-msub><mjx-mo class="mjx-n"><mjx-c class="mjx-c2016"></mjx-c></mjx-mo><mjx-script style="vertical-align: -0.15em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">a</mi></mrow><msub><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mn>2</mn></msub><mo>=</mo><msqrt><munderover><mo data-mjx-texclass="OP">∑</mo><mrow data-mjx-texclass="ORD"><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow data-mjx-texclass="ORD"><mn>1536</mn></mrow></munderover><msubsup><mi>a</mi><mi>i</mi><mn>2</mn></msubsup></msqrt><mo>=</mo><mn>1.0</mn><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mi>e</mi><mi>x</mi><mi>t</mi><mrow data-mjx-texclass="ORD"><mi>a</mi><mi>n</mi><mi>d</mi></mrow><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">b</mi></mrow><msub><mo data-mjx-texclass="ORD" fence="false" stretchy="false">‖</mo><mn>2</mn></msub><mo>=</mo><mn>1.0</mn></math></mjx-assistive-mml></mjx-container>
+          <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="7" style="font-size: 118.2%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-merror data-mjx-error="Cannot read properties of null (reading &#39;4&#39;)" title="Cannot read properties of null (reading &#39;4&#39;)"><mjx-mtext style="font-family: MJXZERO, serif;"><mjx-utext variant="-explicitFont" style="font-size: 84.6%; padding: 0.887em 0px 0.236em; width: 92px;">Math input error</mjx-utext></mjx-mtext></mjx-merror></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><merror data-mjx-error="Cannot read properties of null (reading &#39;4&#39;)" title="Cannot read properties of null (reading &#39;4&#39;)"><mtext>Math input error</mtext></merror></math></mjx-assistive-mml></mjx-container>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed">
+          <strong>Production Performance Impact:</strong> In high-throughput production environments, avoiding vector square-root and normalization calculations during search reduces similarity calculations to a single hardware-accelerated matrix-vector multiplication (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mi class="mjx-b"><mjx-c class="mjx-c1D42A TEX-B"></mjx-c></mjx-mi></mjx-texatom></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mrow data-mjx-texclass="ORD"><mi mathvariant="bold">q</mi></mrow></math></mjx-assistive-mml></mjx-container>).
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 3: RAG ARCHITECTURAL PARADIGM -->
+    <!-- ========================================================= -->
+    <section id="ch3" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 3</span>
+        <h2 class="text-2xl font-bold text-white">The RAG Paradigm: Systems Architecture</h2>
+      </div>
+
+      <!-- Closed Book vs Open Book -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-xl bg-slate-950 border border-rose-900/40 space-y-3">
+          <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            Parametric Memory (Closed-Book Inference)
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The model relies entirely on static weights frozen during pre-training.
+          </p>
+          <ul class="text-xs text-slate-400 space-y-1.5 list-disc pl-4">
+            <li>Zero access to private codebases, enterprise repositories, or dynamic internal data.</li>
+            <li>Susceptible to <strong>confabulation / hallucination</strong> when queried on unfamiliar facts.</li>
+            <li>Updating knowledge requires expensive weight recalculation (fine-tuning or pre-training).</li>
+          </ul>
+        </div>
+
+        <div class="p-6 rounded-xl bg-slate-950 border border-emerald-900/40 space-y-3">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            Non-Parametric Grounding (RAG Open-Book)
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The model acts as an analytical reasoning engine over injected reference documents.
+          </p>
+          <ul class="text-xs text-slate-400 space-y-1.5 list-disc pl-4">
+            <li>Dynamic real-time integration with private documentation and structured databases.</li>
+            <li>Enforces strict provenance: verifiable citations directly back to source documents.</li>
+            <li>Zero retraining cost: knowledge updates happen immediately upon refreshing the vector index.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- The Triad Flow -->
+      <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+        <h3 class="text-white font-bold text-base">The RAG Operational Triad</h3>
+        <div class="grid md:grid-cols-3 gap-6 text-xs">
+          <div class="bg-slate-900 p-5 rounded-lg border border-slate-800 space-y-2">
+            <div class="text-indigo-400 font-mono font-semibold uppercase">Phase 1: Retrieval</div>
+            <p class="text-slate-300 leading-relaxed">
+              The incoming query string is embedded via the same transformation model used for document ingestion. The query vector searches index space using cosine distance to extract candidate chunks.
+            </p>
+          </div>
+          <div class="bg-slate-900 p-5 rounded-lg border border-slate-800 space-y-2">
+            <div class="text-purple-400 font-mono font-semibold uppercase">Phase 2: Augmentation</div>
+            <p class="text-slate-300 leading-relaxed">
+              Retrieved chunks are structured into prompt templates with strict system boundary rules: <em>"You must synthesize an answer exclusively from the provided context. If absent, explicitly decline to answer."</em>
+            </p>
+          </div>
+          <div class="bg-slate-900 p-5 rounded-lg border border-slate-800 space-y-2">
+            <div class="text-emerald-400 font-mono font-semibold uppercase">Phase 3: Generation</div>
+            <p class="text-slate-300 leading-relaxed">
+              The model generates completions over the augmented context window. Setting <code class="text-slate-200">temperature=0.0</code> prevents exploratory probability sampling, yielding deterministic responses.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 4: PRODUCTION RUNNABLE SCRIPT -->
+    <!-- ========================================================= -->
+    <section id="ch4" class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 4</span>
+          <h2 class="text-2xl font-bold text-white">Complete Executable Reference Implementation</h2>
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById(&#39;codeSource&#39;).innerText); alert(&#39;Code copied to clipboard!&#39;);" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition shadow flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          Copy Python File
+        </button>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+        <div class="bg-slate-900/80 px-4 py-2 border-b border-slate-800 text-xs font-mono text-slate-400 flex items-center justify-between">
+          <span>rag_production_demo.py</span>
+          <span>Python 3.10+ | OpenAI SDK 1.0+ | NumPy</span>
+        </div>
+        <pre class="p-6 text-xs text-slate-200 overflow-x-auto leading-relaxed"><code id="codeSource"><span class="text-indigo-400">import</span> os
+<span class="text-indigo-400">import</span> numpy <span class="text-indigo-400">as</span> np
+<span class="text-indigo-400">from</span> openai <span class="text-indigo-400">import</span> OpenAI
+
+<span class="text-slate-500"># 1. Initialize official OpenAI client</span>
+client = OpenAI()
+
+<span class="text-slate-500"># 2. In-Memory Enterprise Knowledge Base (Unstructured Chunks)</span>
+documents = [
+    <span class="text-emerald-300">"Grading Policy: Midterm exams account for 30%, homework assignments 20%, and the final engineering project 50%."</span>,
+    <span class="text-emerald-300">"Office Hours: Professor Ada conducts technical office hours on Tuesdays and Thursdays from 2:00 PM to 4:00 PM in Room 302."</span>,
+    <span class="text-emerald-300">"Late Submission Policy: Deliverables submitted within 24 hours past deadline incur an automatic 10% grade deduction. Zero submissions accepted thereafter."</span>,
+    <span class="text-emerald-300">"Prerequisites: Students must complete CS101 (Intro to Systems Programming) with a grade of C or higher prior to enrollment."</span>
+]
+
+<span class="text-slate-500"># 3. Vector Operations and Embedding Interfaces</span>
+<span class="text-indigo-400">def</span> <span class="text-amber-300">get_embedding</span>(text: str) -&gt; list[float]:
+    <span class="text-slate-500">"""Transforms arbitrary text sequences into 1536-dimensional dense vectors."""</span>
+    response = client.embeddings.create(
+        model=<span class="text-emerald-300">"text-embedding-3-small"</span>,
+        input=text
+    )
+    <span class="text-indigo-400">return</span> response.data[<span class="text-purple-400">0</span>].embedding
+
+<span class="text-indigo-400">def</span> <span class="text-amber-300">cosine_similarity</span>(vec_a: list[float], vec_b: list[float]) -&gt; float:
+    <span class="text-slate-500">"""Evaluates geometric cosine similarity: cos(theta) = (a . b) / (||a|| * ||b||)"""</span>
+    a = np.array(vec_a, dtype=np.float32)
+    b = np.array(vec_b, dtype=np.float32)
+    norm_product = np.linalg.norm(a) * np.linalg.norm(b)
+    <span class="text-indigo-400">if</span> norm_product == <span class="text-purple-400">0</span>:
+        <span class="text-indigo-400">return</span> <span class="text-purple-400">0.0</span>
+    <span class="text-indigo-400">return</span> float(np.dot(a, b) / norm_product)
+
+<span class="text-slate-500"># 4. Ingestion Pipeline: Build Vector Space Index</span>
+print(<span class="text-emerald-300">"[Ingestion] Generating dense embeddings across document chunks..."</span>)
+doc_embeddings = [get_embedding(doc) <span class="text-indigo-400">for</span> doc <span class="text-indigo-400">in</span> documents]
+print(f<span class="text-emerald-300">"[Ingestion] Completed. Indexed {len(doc_embeddings)} vectors in memory.\n"</span>)
+
+<span class="text-slate-500"># 5. Production RAG Execution Pipeline</span>
+<span class="text-indigo-400">def</span> <span class="text-amber-300">rag_query</span>(user_question: str) -&gt; str:
+    <span class="text-slate-500"># Step A: RETRIEVAL - Project query into latent space &amp; find nearest neighbor</span>
+    query_vector = get_embedding(user_question)
+    similarities = [cosine_similarity(query_vector, doc_vec) <span class="text-indigo-400">for</span> doc_vec <span class="text-indigo-400">in</span> doc_embeddings]
+    
+    best_idx = int(np.argmax(similarities))
+    best_similarity = similarities[best_idx]
+    retrieved_chunk = documents[best_idx]
+
+    print(f<span class="text-slate-400">Query:</span> <span class="text-emerald-300">"{user_question}"</span>)
+    print(f<span class="text-slate-400">Nearest Neighbor Chunk:</span> Index {best_idx} (Cosine Similarity: {best_similarity:.4f})")
+    print(f<span class="text-slate-400">Retrieved Passage:</span> <span class="text-slate-300">{retrieved_chunk}</span>\n")
+
+    <span class="text-slate-500"># Step B: AUGMENTATION - Format grounded system constraints</span>
+    system_prompt = (
+        <span class="text-emerald-300">"You are an authoritative enterprise academic assistant. "</span>
+        <span class="text-emerald-300">"Synthesize responses strictly and exclusively from the provided context. "</span>
+        <span class="text-emerald-300">"If the requested information is absent from the context, explicitly state "</span>
+        <span class="text-emerald-300">"'I do not have sufficient information in the provided documentation to answer this question.'"</span>
+    )
+    user_prompt = f<span class="text-emerald-300">"Context:\n{retrieved_chunk}\n\nQuestion: {user_question}"</span>
+
+    <span class="text-slate-500"># Step C: GENERATION - Grounded completion</span>
+    completion = client.chat.completions.create(
+        model=<span class="text-emerald-300">"gpt-4o-mini"</span>,
+        messages=[
+            {<span class="text-emerald-300">"role"</span>: <span class="text-emerald-300">"system"</span>, <span class="text-emerald-300">"content"</span>: system_prompt},
+            {<span class="text-emerald-300">"role"</span>: <span class="text-emerald-300">"user"</span>, <span class="text-emerald-300">"content"</span>: user_prompt}
+        ],
+        temperature=<span class="text-purple-400">0.0</span>  <span class="text-slate-500"># Greedy decoding for strict reproducibility</span>
+    )
+    <span class="text-indigo-400">return</span> completion.choices[<span class="text-purple-400">0</span>].message.content
+
+<span class="text-slate-500"># 6. Execute Live Test Queries</span>
+<span class="text-indigo-400">if</span> __name__ == <span class="text-emerald-300">"__main__"</span>:
+    <span class="text-slate-500"># Test 1: Zero Lexical Overlap Query (Semantic match)</span>
+    q1 = <span class="text-emerald-300">"When can I meet with the instructor in person?"</span>
+    res1 = rag_query(q1)
+    print(f<span class="text-indigo-300">[Model Generation]:</span>\n{res1}\n")
+    print(<span class="text-slate-600">"=" * 70 + "\n"</span>)
+
+    <span class="text-slate-500"># Test 2: Out-Of-Domain Boundary Query (Hallucination resistance test)</span>
+    q2 = <span class="text-emerald-300">"What textbook do we need to purchase for this course?"</span>
+    res2 = rag_query(q2)
+    print(f<span class="text-indigo-300">[Model Generation]:</span>\n{res2}\n")</code></pre>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 5: STEP-BY-STEP CLASSROOM WALKTHROUGH -->
+    <!-- ========================================================= -->
+    <section id="ch5" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 5</span>
+        <h2 class="text-2xl font-bold text-white">Step-by-Step Classroom Walkthrough</h2>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Use these four structured stages to step through the inner mechanics during your lecture or workshop demonstration:
+      </p>
+
+      <div class="space-y-4">
+        <!-- Step 1 -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-white font-bold text-base flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-indigo-600 text-white text-xs">Step 1</span>
+            Ingestion &amp; Vector Embeddings
+          </h3>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Explain that while LLM generation engines operate over discrete token vocabularies, information retrieval relies on numerical spatial geometry. The embedding model <code class="text-indigo-300">text-embedding-3-small</code> maps an arbitrary text chunk to 1,536 floating-point values.
+          </p>
+          <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 space-y-2">
+            <p class="text-xs text-slate-400 font-semibold">Live Interactive Inspection Script for Students:</p>
+            <pre class="text-xs text-slate-300 overflow-x-auto"><code>sample_vec = get_embedding("Hello world")
+print("Dimensionality (length):", len(sample_vec))
+print("First 5 spatial coordinates:", sample_vec[:5])
+print("Euclidean Norm (L2 Length):", np.linalg.norm(sample_vec))  # Proves normalization = 1.0</code></pre>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-white font-bold text-base flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-indigo-600 text-white text-xs">Step 2</span>
+            Semantic Similarity vs. Keyword Search
+          </h3>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Highlight the difference between lexical keyword matching (e.g., regex, SQL <code class="text-indigo-300">LIKE</code>, standard BM25) and dense semantic vector search:
+          </p>
+          <ul class="text-xs text-slate-400 space-y-1.5 list-disc pl-5">
+            <li><strong class="text-white">Query:</strong> <em>"When can I meet with the instructor in person?"</em></li>
+            <li><strong class="text-white">Retrieved Passage:</strong> <em>"Office Hours: Professor Ada holds office hours on Tuesdays and Thursdays..."</em></li>
+            <li><strong class="text-amber-300">Crucial Observation:</strong> Notice that the terms <strong>"meet"</strong>, <strong>"instructor"</strong>, and <strong>"person"</strong> do NOT appear in the stored sentence. Lexical/keyword search returns 0 matches. However, embeddings map them to the same conceptual coordinate neighborhood.</li>
+          </ul>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-white font-bold text-base flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-indigo-600 text-white text-xs">Step 3</span>
+            Prompt Augmentation
+          </h3>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Inspect the raw network payload sent to the LLM. Emphasize that the foundation model is <strong>not</strong> modified, fine-tuned, or retrained. Instead, the context window serves as an ephemeral reference desk. The model applies in-context comprehension over injected paragraphs.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-white font-bold text-base flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-indigo-600 text-white text-xs">Step 4</span>
+            Constrained Generation (Anti-Hallucination Guardrail)
+          </h3>
+          <p class="text-slate-300 text-xs leading-relaxed">
+            Examine the system instructions: <em>"Synthesize responses strictly and exclusively from the provided context."</em>
+          </p>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Execute <strong>Test Query 2</strong> (<em>"What textbook do we need to purchase?"</em>). Point out to students that rather than generating a fictitious textbook title, the model gracefully reports that the information is absent from the provided documentation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CHAPTER 6: PRODUCTION TOPICS & ARCHITECTURAL TRADE-OFFS -->
+    <!-- ========================================================= -->
+    <section id="ch6" class="space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+        <span class="text-sm font-bold text-indigo-400 bg-indigo-950 px-3 py-1 rounded-lg border border-indigo-800">Chapter 6</span>
+        <h2 class="text-2xl font-bold text-white">System Design: Production Trade-Offs</h2>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed">
+        These four topics represent core engineering architectural decisions encountered when scaling RAG prototypes to enterprise scale:
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- 6.1 Top-K Retrieval -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-bold text-base">6.1 Top-<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 118.3%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43E TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></mjx-assistive-mml></mjx-container> Multi-Chunk Retrieval</h3>
+            <span class="text-xs text-indigo-400 font-mono">np.argsort</span>
+          </div>
+          <div class="p-3 bg-indigo-950/40 rounded border border-indigo-800/40 text-xs text-indigo-200">
+            <strong>Discussion Prompt for Students:</strong> "Right now we pick argmax (top 1). What happens if an answer spans multiple paragraphs? How would you retrieve the top 3?"
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Real answers are rarely self-contained in one isolated chunk. Production architectures retrieve the top <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43E TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi></math></mjx-assistive-mml></mjx-container> nearest neighbors (e.g., <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43E TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c33"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>K</mi><mo>=</mo><mn>3</mn></math></mjx-assistive-mml></mjx-container> to <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mn class="mjx-n"><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>5</mn></math></mjx-assistive-mml></mjx-container>) using <code class="text-slate-200">np.argsort</code>, concatenating matches into the prompt context:
+          </p>
+          <pre class="bg-slate-900 p-3 rounded text-xs text-slate-300 overflow-x-auto"><code># Retrieve Top-3 nearest matches
+top_indices = np.argsort(similarities)[-3:][::-1]
+retrieved_chunks = [documents[i] for i in top_indices]
+augmented_context = "\n\n---\n\n".join(retrieved_chunks)</code></pre>
+        </div>
+
+        <!-- 6.2 Chunking Strategies -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-bold text-base">6.2 Chunking &amp; Semantic Dilution</h3>
+            <span class="text-xs text-indigo-400 font-mono">Token Windows</span>
+          </div>
+          <div class="p-3 bg-indigo-950/40 rounded border border-indigo-800/40 text-xs text-indigo-200">
+            <strong>Discussion Prompt for Students:</strong> "If a syllabus is a 20-page PDF, why can't we embed the entire document as one single chunk? What happens to semantic resolution?"
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            <strong>Semantic Averaging:</strong> Embedding an entire 20-page document into a single 1,536-dimensional vector forces the model to average all distinct subtopics into a single spatial coordinate, washing out subtle facts.
+          </p>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            <strong>Production Strategy:</strong> Chunk documents into discrete segments (e.g., 256 to 512 tokens) with a 10% overlap (e.g., 50 tokens) to ensure statements crossing chunk boundaries remain intact.
+          </p>
+        </div>
+
+        <!-- 6.3 Vector Databases -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-bold text-base">6.3 Vector Databases &amp; Scalability</h3>
+            <span class="text-xs text-indigo-400 font-mono">ANN vs Exhaustive</span>
+          </div>
+          <div class="p-3 bg-indigo-950/40 rounded border border-indigo-800/40 text-xs text-indigo-200">
+            <strong>Discussion Prompt for Students:</strong> "Why is np.dot in a Python list unfeasible for 10 million documents? When do we need Chroma, Qdrant, or Pinecone?"
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Exhaustive exact search (<code class="text-slate-200">np.dot</code> over all rows) is <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c22C5"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D437 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo>⋅</mo><mi>D</mi><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>. At <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="14" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="2"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="2"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi><mo>=</mo><mn>10</mn><mo>,</mo><mn>000</mn><mo>,</mo><mn>000</mn></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="15" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D437 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="2"><mjx-c class="mjx-c35"></mjx-c><mjx-c class="mjx-c33"></mjx-c><mjx-c class="mjx-c36"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>536</mn></math></mjx-assistive-mml></mjx-container>, a single query requires ~15 billion floating-point operations.
+          </p>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Dedicated vector databases use <strong>Approximate Nearest Neighbor (ANN)</strong> indexing algorithms like <strong>HNSW (Hierarchical Navigable Small World)</strong> graphs or <strong>IVF-PQ (Inverted File with Product Quantization)</strong> to deliver sub-10ms search times (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="16" style="font-size: 118.5%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D442 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-n"><mjx-c class="mjx-c6C"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c67"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2061"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D441 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo data-mjx-texclass="NONE">⁡</mo><mi>N</mi><mo stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>) across millions of documents.
+          </p>
+        </div>
+
+        <!-- 6.4 Hybrid Search -->
+        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-bold text-base">6.4 Hybrid Search (Dense + Sparse BM25)</h3>
+            <span class="text-xs text-indigo-400 font-mono">Reciprocal Rank Fusion</span>
+          </div>
+          <div class="p-3 bg-indigo-950/40 rounded border border-indigo-800/40 text-xs text-indigo-200">
+            <strong>Discussion Prompt for Students:</strong> "When might vector search fail where keyword search (BM25) excels (e.g., part numbers, error codes, rare IDs)?"
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Dense embeddings match conceptual semantics, but often struggle with precise serial numbers, UUIDs, function signatures, or rare acronyms.
+          </p>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            <strong>Production Standard:</strong> Combine sparse lexical retrieval (BM25) with dense embedding retrieval, re-ranking candidate results using <strong>Reciprocal Rank Fusion (RRF)</strong> or a neural cross-encoder.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+</body></html>
